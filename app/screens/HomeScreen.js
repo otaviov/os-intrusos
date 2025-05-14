@@ -84,20 +84,20 @@ export default function HomeScreen() {
       setDestino(text);
     }
 
-    // Realiza a requisição após 500ms
+    // Realiza a requisição após 700ms
     debounceTimeout.current = setTimeout(() => {
       buscarCidades(text, tipo);
-    }, 500); // Debounce de 500ms
+    }, 700); // Aumentando o debounce para 700ms
   }, []);
 
   // Função para selecionar a sugestão
   const selecionarSugestao = (item, tipo) => {
     if (tipo === 'origem') {
       setOrigem(item.nome);
-      setSugestoesOrigem([]);
+      setSugestoesOrigem([]); // Limpa as sugestões após a seleção
     } else {
       setDestino(item.nome);
-      setSugestoesDestino([]);
+      setSugestoesDestino([]); // Limpa as sugestões após a seleção
     }
   };
 
