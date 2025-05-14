@@ -17,14 +17,33 @@ const buscarLocalizacoes = async (texto, limite = 10) => {
       `https://us1.locationiq.com/v1/search.php?key=${chaveAPI}&q=${encodeURIComponent(texto)}&format=json&countrycodes=BR&limit=${limite}`
     );
 
-    console.log('Resposta da API do LocationIQ:', response.data);
+    // mostrar resultado no terminal
+    //console.log('Resposta da API do LocationIQ:', response.data);
 
     if (response.data && response.data.length > 0) {
-      return response.data.map((item) => ({
-        nome: item.display_name,
-        latitude: item.lat,
-        longitude: item.lon,
-      }));
+      return response.data.map((item) => {
+        const nome = item.display_name || '';
+        
+        // Dividindo o display_name por vírgulas
+        const partes = nome.split(',').map((parte) => parte.trim());
+
+        // A cidade é o primeiro item
+        const cidade = partes[0];
+
+        // O estado está no sexto item (índice 5)
+        let estado = partes.length > 3 ? partes[3] : '';
+
+        // Garantir que o estado não tenha algo como "Estado de"
+        if (estado && estado.includes('Estado de')) {
+          estado = estado.replace('Estado de', '').trim();
+        }
+
+        return {
+          nome: `${cidade}, ${estado}`, // Exibe cidade e estado
+          latitude: item.lat,
+          longitude: item.lon,
+        };
+      });
     } else {
       console.log('Nenhum resultado encontrado para:', texto);
       return [];
@@ -107,7 +126,7 @@ export default function HomeScreen() {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Os Intrusos</Text>
+      <Text style={styles.title}>OS INTRUSOS</Text>
 
       <View style={styles.form}>
         {/* Campo de Origem */}
