@@ -18,7 +18,7 @@ export default function IntroScreen() {
   return (
       <View style={styles.container}>
       <LottieView
-        source={require('../animations/3.json')}
+        source={require('../animations/intro_carro_homem.json')}
         autoPlay
         loop={false}
         style={styles.animation}
