@@ -9,8 +9,8 @@ export default function IntroScreen() {
 
   useEffect(() => {
     const timer = setTimeout(() => {
-      navigation.replace('Home'); // ou qualquer que seja a tela principal
-    }, 4000); // duração da animação antes de ir pra Home
+      navigation.replace('Login'); // ou qualquer que seja a tela principal
+    }, 5000); // duração da animação antes de ir pra Home
 
     return () => clearTimeout(timer);
   }, []);
