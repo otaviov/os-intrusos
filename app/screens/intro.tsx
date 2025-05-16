@@ -1,22 +1,21 @@
-// app/screens/IntroScreen.js
-import { useNavigation } from '@react-navigation/native';
+import { useRouter } from 'expo-router';
 import LottieView from 'lottie-react-native';
 import { useEffect } from 'react';
 import { StyleSheet, View } from 'react-native';
 
 export default function IntroScreen() {
-  const navigation = useNavigation();
+  const router = useRouter();
 
   useEffect(() => {
     const timer = setTimeout(() => {
-      navigation.replace('Login'); // ou qualquer que seja a tela principal
-    }, 5000); // duração da animação antes de ir pra Home
+      router.replace('/screens/login'); // navega pra /login após 5s
+    }, 5000);
 
     return () => clearTimeout(timer);
   }, []);
 
   return (
-      <View style={styles.container}>
+    <View style={styles.container}>
       <LottieView
         source={require('../animations/intro_carro_homem.json')}
         autoPlay
@@ -24,7 +23,6 @@ export default function IntroScreen() {
         style={styles.animation}
       />
     </View>
-     
   );
 }
 
