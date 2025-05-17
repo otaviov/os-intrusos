@@ -1,10 +1,32 @@
 import { useRouter } from 'expo-router';
-import React, { useState } from 'react';
-import { ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
-import FakeCheckbox from '../../components/FakeCheckbox'; // ou o caminho certo aí
+import React, { useEffect, useState } from 'react';
+import {
+  Image,
+  Keyboard,
+  KeyboardAvoidingView,
+  Platform,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
+} from 'react-native';
+import FakeCheckbox from '../../components/FakeCheckbox';
 
 export default function Cadastro() {
   const router = useRouter();
+  const [keyboardVisible, setKeyboardVisible] = useState(false);
+
+  useEffect(() => {
+    const showSub = Keyboard.addListener('keyboardDidShow', () => setKeyboardVisible(true));
+    const hideSub = Keyboard.addListener('keyboardDidHide', () => setKeyboardVisible(false));
+
+    return () => {
+      showSub.remove();
+      hideSub.remove();
+    };
+  }, []);
 
   const [form, setForm] = useState({
     nome: '',
@@ -16,7 +38,7 @@ export default function Cadastro() {
   });
 
   const [aceitaTermos, setAceitaTermos] = useState(false);
-  
+
   const handleChange = (field, value) => {
     setForm({ ...form, [field]: value });
   };
@@ -28,84 +50,122 @@ export default function Cadastro() {
     }
     alert('Cadastro feito com sucesso!');
     router.replace('/screens/login'); // troca para a tela de login
+
   };
 
   return (
-   <ScrollView contentContainerStyle={styles.container}>
-      <Text style={styles.logo}>🚗 Os Intrusos</Text>
-      <Text style={styles.titulo}>Cadastro</Text>
-      <Text style={styles.subtitulo}>Conforto e Cuidado</Text>
+    <KeyboardAvoidingView
+      style={{ flex: 1 }}
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+    >
 
-      <TextInput style={styles.input} placeholder="Nome Completo" onChangeText={v => handleChange('nome', v)} />
-      <TextInput style={styles.input} placeholder="Sexo" onChangeText={v => handleChange('sexo', v)} />
-      <TextInput style={styles.input} placeholder="E-mail" keyboardType="email-address" onChangeText={v => handleChange('email', v)} />
-      <TextInput style={styles.input} placeholder="Celular" keyboardType="phone-pad" onChangeText={v => handleChange('celular', v)} />
-      <TextInput style={styles.input} placeholder="CPF / CNPJ" keyboardType="numeric" onChangeText={v => handleChange('cpfCnpj', v)} />
-      <TextInput style={styles.input} placeholder="Senha" secureTextEntry onChangeText={v => handleChange('senha', v)} />
+      <ScrollView
+        contentContainerStyle={[styles.container, { minHeight: '100%' }]}
+        keyboardShouldPersistTaps="handled"
+      >
+        {!keyboardVisible && (
+          <Image
+            source={require('../../assets/images/in.png')}
+            style={styles.logo}
+          />
+        )}
 
-      <View style={styles.checkboxContainer}>
-        <FakeCheckbox value={aceitaTermos} onChange={setAceitaTermos} />
-        <Text style={styles.checkboxLabel}>
-          Li e aceito os <Text style={styles.link}>Termos de Uso</Text> e <Text style={styles.link}>Política de Privacidade</Text>
-        </Text>
-      </View>
+        <View style={styles.formContainer}>
+          <Text style={styles.title}>Cadastro</Text>
+          <Text style={styles.subtitle}>Preencha os dados para criar sua conta</Text>
 
-      <TouchableOpacity style={styles.botao} onPress={handleCadastro}>
-        <Text style={styles.textoBotao}>Entrar</Text>
-      </TouchableOpacity>
-    </ScrollView>
+
+          <TextInput style={styles.input} placeholder="Nome Completo" onChangeText={v => handleChange('nome', v)} />
+          <TextInput style={styles.input} placeholder="Sexo" onChangeText={v => handleChange('sexo', v)} />
+          <TextInput style={styles.input} placeholder="E-mail" keyboardType="email-address" onChangeText={v => handleChange('email', v)} />
+          <TextInput style={styles.input} placeholder="Celular" keyboardType="phone-pad" onChangeText={v => handleChange('celular', v)} />
+          <TextInput style={styles.input} placeholder="CPF / CNPJ" keyboardType="numeric" onChangeText={v => handleChange('cpfCnpj', v)} />
+          <TextInput style={styles.input} placeholder="Senha" secureTextEntry onChangeText={v => handleChange('senha', v)} />
+
+          <View style={styles.checkboxContainer}>
+            <FakeCheckbox value={aceitaTermos} onChange={setAceitaTermos} />
+            <Text style={styles.checkboxLabel}>
+              Li e aceito os{' '}
+              <Text style={styles.link} onPress={() => console.log('Termos de Uso')}>
+                Termos de Uso
+              </Text>{' '}
+              e{' '}
+              <Text style={styles.link} onPress={() => router.push('/screens/login')}>
+                Política de Privacidade
+              </Text>
+            </Text>
+          </View>
+
+          <TouchableOpacity style={styles.botao} onPress={handleCadastro}>
+            <Text style={styles.textoBotao}>Entrar</Text>
+          </TouchableOpacity>
+        </View>
+      </ScrollView>
+    </KeyboardAvoidingView>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    padding: 20,
-    backgroundColor: '#fff',
     flexGrow: 1,
+    padding: 24,
+    backgroundColor: '#fff',
     justifyContent: 'center',
+    position: 'relative',
   },
   logo: {
-    fontSize: 24,
+    width: 180,
+    height: 180,
+    resizeMode: 'contain',
+    alignSelf: 'center',
+    //marginBottom: 40,
+    //marginTop: 40, 
+  },
+  formContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    //alignItems: 'center',
+  },
+  title: {
+    fontSize: 26,
     fontWeight: 'bold',
     textAlign: 'center',
+    marginBottom: 8,
   },
-  subtitulo: {
-    fontSize: 14,
+  subtitle: {
+    fontSize: 16,
+    color: '#777',
     textAlign: 'center',
-    color: '#555',
-    marginBottom: 20,
-  },
-  titulo: {
-    fontSize: 28,
-    fontWeight: 'bold',
-    textAlign: 'center',
-    marginVertical: 20,
+    marginBottom: 60,
   },
   input: {
     borderBottomWidth: 1,
     borderColor: '#ccc',
-    marginBottom: 15,
     paddingVertical: 5,
-    paddingHorizontal: 10,
+    paddingHorizontal: 12,
+    fontSize: 16,
+    marginBottom: 16,
   },
   checkboxContainer: {
     flexDirection: 'row',
+    alignItems: 'flex-start',
     marginBottom: 20,
-    alignItems: 'center',
+    gap: 8,
   },
   checkboxLabel: {
-    marginLeft: 8,
     flex: 1,
-    flexWrap: 'wrap',
+    color: '#666',
+    fontSize: 14,
+    lineHeight: 20,
   },
   link: {
+    color: '#007bff',
     fontWeight: 'bold',
-    color: '#000',
   },
   botao: {
-    backgroundColor: '#000',
-    padding: 15,
-    borderRadius: 6,
+    backgroundColor: '#111',
+    padding: 14,
+    borderRadius: 8,
     alignItems: 'center',
   },
   textoBotao: {
