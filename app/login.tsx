@@ -38,7 +38,7 @@ export default function Login() {
       >
         {!keyboardVisible && (
           <Image
-            source={require('../../assets/images/in.png')}
+            source={require('../assets/images/in.png')}
             style={styles.logo}
           />
         )}
@@ -63,7 +63,7 @@ export default function Login() {
             <Text style={styles.forgot}>Esqueceu sua senha?</Text>
           </TouchableOpacity>
 
-          <TouchableOpacity style={styles.button} onPress={() => router.push('/screens/home')}>
+          <TouchableOpacity style={styles.button} onPress={() => router.push('/home')}>
             <Text style={styles.buttonText}>Entrar</Text>
           </TouchableOpacity>
 
@@ -71,19 +71,19 @@ export default function Login() {
 
           <View style={styles.socialContainer}>
             <TouchableOpacity style={styles.socialButton}>
-              <Image source={require('../../assets/images/google-icon.png')} style={styles.socialIcon} />
+              <Image source={require('../assets/images/google-icon.png')} style={styles.socialIcon} />
               <Text>Google</Text>
             </TouchableOpacity>
 
             <TouchableOpacity style={styles.socialButton}>
-              <Image source={require('../../assets/images/facebook-icon.png')} style={styles.socialIcon} />
+              <Image source={require('../assets/images/facebook-icon.png')} style={styles.socialIcon} />
               <Text>Facebook</Text>
             </TouchableOpacity>
           </View>
 
           <View style={styles.newAccount}>
             <Text style={styles.footerText}>Não tem conta?</Text>
-            <TouchableOpacity onPress={() => router.push('/screens/cadastro')}>
+            <TouchableOpacity onPress={() => router.push('/cadastro')}>
               <Text style={styles.link}> Crie uma agora</Text>
             </TouchableOpacity>
           </View>

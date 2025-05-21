@@ -12,7 +12,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import FakeCheckbox from '../../components/FakeCheckbox';
+import FakeCheckbox from '../components/FakeCheckbox';
 
 export default function Cadastro() {
   const router = useRouter();
@@ -49,7 +49,7 @@ export default function Cadastro() {
       return;
     }
     alert('Cadastro feito com sucesso!');
-    router.replace('/screens/login'); // troca para a tela de login
+    router.replace('/login'); // troca para a tela de login
 
   };
 
@@ -65,7 +65,7 @@ export default function Cadastro() {
       >
         {!keyboardVisible && (
           <Image
-            source={require('../../assets/images/in.png')}
+            source={require('../assets/images/in.png')}
             style={styles.logo}
           />
         )}
@@ -75,12 +75,12 @@ export default function Cadastro() {
           <Text style={styles.subtitle}>Preencha os dados para criar sua conta</Text>
 
 
-          <TextInput style={styles.input} placeholder="Nome Completo" onChangeText={v => handleChange('nome', v)} />
-          <TextInput style={styles.input} placeholder="Sexo" onChangeText={v => handleChange('sexo', v)} />
-          <TextInput style={styles.input} placeholder="E-mail" keyboardType="email-address" onChangeText={v => handleChange('email', v)} />
-          <TextInput style={styles.input} placeholder="Celular" keyboardType="phone-pad" onChangeText={v => handleChange('celular', v)} />
-          <TextInput style={styles.input} placeholder="CPF / CNPJ" keyboardType="numeric" onChangeText={v => handleChange('cpfCnpj', v)} />
-          <TextInput style={styles.input} placeholder="Senha" secureTextEntry onChangeText={v => handleChange('senha', v)} />
+          <TextInput style={styles.input} placeholder="Nome Completo" placeholderTextColor="#aaa" onChangeText={v => handleChange('nome', v)} />
+          <TextInput style={styles.input} placeholder="Sexo" placeholderTextColor="#aaa" onChangeText={v => handleChange('sexo', v)} />
+          <TextInput style={styles.input} placeholder="E-mail" placeholderTextColor="#aaa" keyboardType="email-address" onChangeText={v => handleChange('email', v)} />
+          <TextInput style={styles.input} placeholder="Celular" placeholderTextColor="#aaa" keyboardType="phone-pad" onChangeText={v => handleChange('celular', v)} />
+          <TextInput style={styles.input} placeholder="CPF / CNPJ" placeholderTextColor="#aaa" keyboardType="numeric" onChangeText={v => handleChange('cpfCnpj', v)} />
+          <TextInput style={styles.input} placeholder="Senha" placeholderTextColor="#aaa" secureTextEntry onChangeText={v => handleChange('senha', v)} />
 
           <View style={styles.checkboxContainer}>
             <FakeCheckbox value={aceitaTermos} onChange={setAceitaTermos} />
@@ -90,7 +90,7 @@ export default function Cadastro() {
                 Termos de Uso
               </Text>{' '}
               e{' '}
-              <Text style={styles.link} onPress={() => router.push('/screens/login')}>
+              <Text style={styles.link} onPress={() => router.push('/login')}>
                 Política de Privacidade
               </Text>
             </Text>

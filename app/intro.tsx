@@ -8,7 +8,7 @@ export default function IntroScreen() {
 
   useEffect(() => {
     const timer = setTimeout(() => {
-      router.replace('/screens/login'); // navega pra /login após 5s
+      router.replace('/login'); // navega pra /login após 5s
     }, 5000);
 
     return () => clearTimeout(timer);
@@ -17,7 +17,7 @@ export default function IntroScreen() {
   return (
     <View style={styles.container}>
       <LottieView
-        source={require('../animations/intro_carro_homem.json')}
+        source={require('./animations/intro_carro_homem.json')}
         autoPlay
         loop={false}
         style={styles.animation}
