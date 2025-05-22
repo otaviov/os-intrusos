@@ -14,32 +14,27 @@ import {
   View
 } from 'react-native';
 
-
-const chaveAPI = 'pk.60997858859c4d9a1cf9c77d4b8dca83';  // Substitua pela sua chave de API do LocationIQ
+const chaveAPI = 'pk.60997858859c4d9a1cf9c77d4b8dca83';
 
 const buscarLocalizacoes = async (texto, limite = 10) => {
   try {
     const response = await axios.get(
       `https://us1.locationiq.com/v1/search.php?key=${chaveAPI}&q=${encodeURIComponent(texto)}&format=json&countrycodes=BR&limit=${limite}`
     );
-    // mostrar resultado no terminal
-    //console.log('Resposta da API do LocationIQ:', response.data);
+
     if (response.data && response.data.length > 0) {
       return response.data.map((item) => {
         const nome = item.display_name || '';
-        // Dividindo o display_name por vírgulas
         const partes = nome.split(',').map((parte) => parte.trim());
-        // A cidade é o primeiro item
         const cidade = partes[0];
-        // O estado está no sexto item (índice 5)
         let estado = partes.length > 3 ? partes[3] : '';
-        // Garantir que o estado não tenha algo como "Estado de"
+
         if (estado && estado.includes('Estado de')) {
           estado = estado.replace('Estado de', '').trim();
         }
 
         return {
-          nome: `${cidade}, ${estado}`, // Exibe cidade e estado
+          nome: `${cidade}, ${estado}`,
           latitude: item.lat,
           longitude: item.lon,
         };
@@ -58,15 +53,16 @@ export default function HomeScreen() {
   const [origem, setOrigem] = useState('');
   const [destino, setDestino] = useState('');
   const [data, setData] = useState('');
-  const [vagas, setVagas] = useState('');
+  const [vagas, setVagas] = useState(1);
   const [sugestoesOrigem, setSugestoesOrigem] = useState([]);
   const [sugestoesDestino, setSugestoesDestino] = useState([]);
-  const [campoFocado, setCampoFocado] = useState(null);
-
-  const debounceTimeout = useRef(null); // Ref para controlar o debounce
-  const carregando = useRef(false); // Ref para controle de requisições pendentes
-
+  const [mostrarSugestoesOrigem, setMostrarSugestoesOrigem] = useState(false);
+  const [mostrarSugestoesDestino, setMostrarSugestoesDestino] = useState(false);
   const [keyboardVisible, setKeyboardVisible] = useState(false);
+
+  const debounceTimeout = useRef(null);
+  const carregando = useRef(false);
+
   useEffect(() => {
     const showSub = Keyboard.addListener('keyboardDidShow', () => setKeyboardVisible(true));
     const hideSub = Keyboard.addListener('keyboardDidHide', () => setKeyboardVisible(false));
@@ -76,59 +72,77 @@ export default function HomeScreen() {
     };
   }, []);
 
-  // Função que faz a busca da cidade de forma eficiente
   const buscarCidades = async (texto, tipo) => {
-    if (texto.trim() === '') return; // Evitar buscar quando o campo está vazio
-    // Se já está carregando a pesquisa anterior, não inicia outra
+    if (texto.trim() === '') return;
     if (carregando.current) return;
+
     try {
-      carregando.current = true; // Bloqueia novas requisições enquanto uma está sendo feita
-      // Limitar o número de resultados (exemplo: 10 resultados)
+      carregando.current = true;
       const resultados = await buscarLocalizacoes(texto, 10);
       if (tipo === 'origem') {
         setSugestoesOrigem(resultados);
+        setMostrarSugestoesOrigem(true);
       } else {
         setSugestoesDestino(resultados);
+        setMostrarSugestoesDestino(true);
       }
     } catch (err) {
       console.error("Erro ao buscar localizações:", err);
     } finally {
-      carregando.current = false; // Libera para futuras requisições
+      carregando.current = false;
     }
   };
 
-  // Função de debounce para reduzir o número de requisições
   const handleChange = useCallback((text, tipo) => {
     if (debounceTimeout.current) {
-      clearTimeout(debounceTimeout.current); // Limpa o debounce anterior
+      clearTimeout(debounceTimeout.current);
     }
 
-    // Atualiza o valor do campo sem acionar a busca imediatamente
     if (tipo === 'origem') {
       setOrigem(text);
+      if (text === '') {
+        setMostrarSugestoesOrigem(false);
+      }
     } else {
       setDestino(text);
+      if (text === '') {
+        setMostrarSugestoesDestino(false);
+      }
     }
-
-    // Realiza a requisição após 700ms
     debounceTimeout.current = setTimeout(() => {
       buscarCidades(text, tipo);
-    }, 700); // Aumentando o debounce para 700ms
+    }, 700);
   }, []);
 
-  // Função para selecionar a sugestão
   const selecionarSugestao = (item, tipo) => {
     if (tipo === 'origem') {
       setOrigem(item.nome);
-      setSugestoesOrigem([]); // Limpa as sugestões após a seleção
+      setMostrarSugestoesOrigem(false);
     } else {
       setDestino(item.nome);
-      setSugestoesDestino([]); // Limpa as sugestões após a seleção
+      setMostrarSugestoesDestino(false);
+    }
+  };
+
+  const fecharSugestoes = (tipo) => {
+    if (tipo === 'origem') {
+      setMostrarSugestoesOrigem(false);
+    } else {
+      setMostrarSugestoesDestino(false);
     }
   };
 
   const buscarViagens = () => {
-    alert(`Buscando ${vagas} vaga(s) de ${origem} para ${destino}`);
+    alert(`Buscando ${vagas} vaga(s) de ${origem} para ${destino} na data ${data}`);
+  };
+
+  // Função para aumentar vagas (com limite de 8)
+  const aumentarVagas = () => {
+    setVagas(prev => prev < 8 ? prev + 1 : 8);
+  };
+  // Função para diminuir vagas (mantendo seu código original)
+  const diminuirVagas = () => {
+    setVagas(prev => (prev > 1 ? prev - 1 : 1));
   };
 
   return (
@@ -148,91 +162,113 @@ export default function HomeScreen() {
         )}
 
         <View style={styles.formContainer}>
-          <Text style={styles.title}>Where to day?</Text>
+          <Text style={styles.title}>Where to today?</Text>
+          <Text style={styles.subtitle}>Escolha para onde você quer ir</Text>
+
 
           {/* Campo de Origem */}
           <View style={styles.inputWrapper}>
-            <Text style={styles.inputLabel}>Saindo de</Text>
             <TextInput
               style={styles.input}
-              placeholder=""
+              placeholder="Saindo de"
+              placeholderTextColor="#aaa"
               value={origem}
               onChangeText={(text) => handleChange(text, 'origem')}
-              onFocus={() => setCampoFocado('origem')}
+              onFocus={() => setMostrarSugestoesOrigem(true)}
               autoCapitalize="none"
               autoCorrect={false}
-              keyboardType="default"
             />
-            {sugestoesOrigem.length > 0 && (
-              <FlatList
-                style={styles.sugestoes}
-                data={sugestoesOrigem}
-                keyExtractor={(item, index) => index.toString()}
-                renderItem={({ item }) => (
-                  <TouchableOpacity onPress={() => selecionarSugestao(item, 'origem')}>
-                    <Text style={styles.sugestao}>{item.nome}</Text>
-                  </TouchableOpacity>
-                )}
-              />
+            {mostrarSugestoesOrigem && sugestoesOrigem.length > 0 && (
+              <View style={styles.sugestoesContainer}>
+                <FlatList
+                  style={styles.sugestoes}
+                  data={sugestoesOrigem}
+                  keyExtractor={(item, index) => index.toString()}
+                  renderItem={({ item }) => (
+                    <TouchableOpacity onPress={() => selecionarSugestao(item, 'origem')}>
+                      <Text style={styles.sugestao}>{item.nome}</Text>
+                    </TouchableOpacity>
+                  )}
+                />
+                <TouchableOpacity
+                  style={styles.fecharSugestoes}
+                  onPress={() => fecharSugestoes('origem')}
+                >
+                  <Text style={styles.fecharTexto}>Voltar</Text>
+                </TouchableOpacity>
+              </View>
             )}
           </View>
 
           {/* Campo de Destino */}
           <View style={styles.inputWrapper}>
-            <Text style={styles.inputLabel}>Indo para</Text>
             <TextInput
               style={styles.input}
-              placeholder=""
+              placeholder="Indo para"
+              placeholderTextColor="#aaa"
               value={destino}
               onChangeText={(text) => handleChange(text, 'destino')}
-              onFocus={() => setCampoFocado('destino')}
+              onFocus={() => setMostrarSugestoesDestino(true)}
               autoCapitalize="none"
               autoCorrect={false}
-              keyboardType="default"
             />
-            {sugestoesDestino.length > 0 && (
-              <FlatList
-                style={styles.sugestoes}
-                data={sugestoesDestino}
-                keyExtractor={(item, index) => index.toString()}
-                renderItem={({ item }) => (
-                  <TouchableOpacity onPress={() => selecionarSugestao(item, 'destino')}>
-                    <Text style={styles.sugestao}>{item.nome}</Text>
-                  </TouchableOpacity>
-                )}
-              />
+            {mostrarSugestoesDestino && sugestoesDestino.length > 0 && (
+              <View style={styles.sugestoesContainer}>
+                <FlatList
+                  style={styles.sugestoes}
+                  data={sugestoesDestino}
+                  keyExtractor={(item, index) => index.toString()}
+                  renderItem={({ item }) => (
+                    <TouchableOpacity onPress={() => selecionarSugestao(item, 'destino')}>
+                      <Text style={styles.sugestao}>{item.nome}</Text>
+                    </TouchableOpacity>
+                  )}
+                />
+                <TouchableOpacity
+                  style={styles.fecharSugestoes}
+                  onPress={() => fecharSugestoes('destino')}
+                >
+                  <Text style={styles.fecharTexto}>Voltar</Text>
+                </TouchableOpacity>
+              </View>
             )}
           </View>
 
-          {/*Campo de Data*/}
-          <View style={styles.inputWrapper}>
-            <Text style={styles.inputLabel}>Data</Text>
-            <TextInput 
-            style = {styles.input}
-            placeholder=""
+          {/* Campo de Data */}
+          <TextInput
+            style={styles.input}
+            placeholder="Data"
+            placeholderTextColor="#aaa"
             value={data}
             onChangeText={setData}
-            keyboardType="default"
-            />
-          </View>
+          />
 
           {/* Campo de Vagas */}
           <View style={styles.vagasContainer}>
-            <Text style={styles.inputLabel}>Vagas</Text>
-            <View style={styles.counterContainer}>
-              <TouchableOpacity style={styles.counterButton}>
-                <Text style={styles.counterText}>-</Text>
-              </TouchableOpacity>
-              <Text style={styles.counterValue}>1</Text>
-              <TouchableOpacity style={styles.counterButton}>
-                <Text style={styles.counterText}>+</Text>
-              </TouchableOpacity>
+            <TouchableOpacity
+              onPress={diminuirVagas}
+              style={styles.vagasBotao}
+              disabled={vagas <= 1} // Desabilita se for 1
+            >
+              <Text style={[styles.vagasLabel, vagas <= 1 && styles.disabled]}>-</Text>
+            </TouchableOpacity>
+
+            <View style={styles.vagasDisplay}>
+              <Text style={styles.vagasNumero}>{vagas}</Text>
             </View>
+
+            <TouchableOpacity
+              onPress={aumentarVagas}
+              style={styles.vagasBotao}
+              disabled={vagas >= 8} // Desabilita se for 8
+            >
+              <Text style={[styles.vagasLabel, vagas >= 8 && styles.disabled]}>+</Text>
+            </TouchableOpacity>
           </View>
-        
+
           {/* Botão Buscar */}
-          <TouchableOpacity style={styles.button} onPress={buscarViagens}>
-            <Text style={styles.buttonText}>Buscar Viagens</Text>
+          <TouchableOpacity style={styles.botao} onPress={buscarViagens}>
+            <Text style={styles.textoBotao}>Buscar Viagem</Text>
           </TouchableOpacity>
         </View>
       </ScrollView>
@@ -259,75 +295,97 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   title: {
-    fontSize: 24,
+    fontSize: 26,
     fontWeight: 'bold',
     textAlign: 'center',
-    marginBottom: 40,
+    marginBottom: 8,
     color: '#000',
   },
-  inputWrapper: { 
-    marginBottom: 24,
-  },
-  inputlabel:{
+  subtitle: {
     fontSize: 16,
-    color: '#666',
-    marginBottom: 8,
+    color: '#777',
+    textAlign: 'center',
+    marginBottom: 60,
+  },
+  inputWrapper: {
+    position: 'relative',
+    //marginBottom: 24,
   },
   input: {
     height: 50,
     borderBottomWidth: 1,
-    borderColor: '#000113',
+    borderColor: '#ccc',
+    paddingVertical: 5,
     paddingHorizontal: 12,
     fontSize: 16,
+    marginBottom: 16,
   },
-  sugestoes: {
+  sugestoesContainer: {
     position: 'absolute',
-    top: 80,
-    width: '100%',
+    top: 40,
+    left: 0,
+    right: 0,
     backgroundColor: '#fff',
-    zIndex: 10,
-    elevation: 5,
     borderWidth: 1,
     borderColor: '#ccc',
-    borderTopWidth: 0,
+    borderRadius: 4,
+    zIndex: 10,
+    elevation: 5,
+  },
+  sugestoes: {
+    maxHeight: 200,
   },
   sugestao: {
     padding: 10,
     borderBottomWidth: 1,
     borderBottomColor: '#eee',
   },
-  vagasContainer: {
-    marginBottom: 24,
+  fecharSugestoes: {
+    padding: 10,
+    backgroundColor: '#f5f5f5',
+    alignItems: 'center',
+    borderTopWidth: 1,
+    borderTopColor: '#eee',
   },
-  counterContainer: {
+  fecharTexto: {
+    color: '#007bff',
+    fontWeight: 'bold',
+  },
+  vagasContainer: {
     flexDirection: 'row',
     alignItems: 'center',
+    justifyContent: 'center',
+    marginBottom: 16,
     borderBottomWidth: 1,
-    borderColor: '#000113',
-    paddingVertical: 10,
+    borderColor: '#ccc',
+    paddingVertical: 5,
   },
-  counterButton:{
+  vagasBotao: {
     paddingHorizontal: 15,
     paddingVertical: 5,
   },
-  counterText: {
+  vagasLabel: {
     fontSize: 20,
-    color: '#000',
+    color: '#111',
   },
-  counterValue: {
-    fontSize: 16,
-    marginHorizontal: 15,
-  },
-  button: {
-    backgroundColor: '#111',
-    paddingVertical: 16,
-    borderRadius: 8,
-    marginTop: 20,
+  vagasDisplay: {
+    minWidth: 40,
     alignItems: 'center',
   },
-  buttonText: {
-    color: '#fff',
+  vagasNumero: {
     fontSize: 16,
+  },
+  disabled: {
+    color: '#ccc', // Cor mais clara quando desabilitado
+  },
+  botao: {
+    backgroundColor: '#111',
+    padding: 14,
+    borderRadius: 8,
+    alignItems: 'center',
+  },
+  textoBotao: {
+    color: '#fff',
     fontWeight: 'bold',
   },
 });
