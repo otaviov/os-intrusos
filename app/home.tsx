@@ -1,3 +1,4 @@
+// home.tsx
 import axios from 'axios';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import {
@@ -299,7 +300,6 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     textAlign: 'center',
     marginBottom: 8,
-    color: '#000',
   },
   subtitle: {
     fontSize: 16,
@@ -312,7 +312,7 @@ const styles = StyleSheet.create({
     //marginBottom: 24,
   },
   input: {
-    height: 50,
+    height: 35,
     borderBottomWidth: 1,
     borderColor: '#ccc',
     paddingVertical: 5,
@@ -354,11 +354,11 @@ const styles = StyleSheet.create({
   vagasContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'center',
-    marginBottom: 16,
+    justifyContent: 'right',
+    marginBottom: 50,
     borderBottomWidth: 1,
     borderColor: '#ccc',
-    paddingVertical: 5,
+    //paddingVertical: 5,
   },
   vagasBotao: {
     paddingHorizontal: 15,
@@ -369,7 +369,7 @@ const styles = StyleSheet.create({
     color: '#111',
   },
   vagasDisplay: {
-    minWidth: 40,
+    minWidth: 50,
     alignItems: 'center',
   },
   vagasNumero: {

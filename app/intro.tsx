@@ -1,3 +1,4 @@
+// intro.tsx
 import { useRouter } from 'expo-router';
 import LottieView from 'lottie-react-native';
 import { useEffect } from 'react';

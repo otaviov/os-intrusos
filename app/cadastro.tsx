@@ -1,3 +1,4 @@
+// cadastro.tsx
 import { useRouter } from 'expo-router';
 import React, { useEffect, useState } from 'react';
 import {
@@ -117,9 +118,7 @@ const styles = StyleSheet.create({
     width: 180,
     height: 180,
     resizeMode: 'contain',
-    alignSelf: 'center',
-    //marginBottom: 40,
-    //marginTop: 40, 
+    alignSelf: 'center', 
   },
   formContainer: {
     flex: 1,

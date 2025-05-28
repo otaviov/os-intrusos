@@ -1,3 +1,4 @@
+// login.tsx
 import { useRouter } from 'expo-router';
 import React, { useEffect, useState } from 'react';
 import {
@@ -59,7 +60,7 @@ export default function Login() {
             style={styles.senha}
           />
 
-          <TouchableOpacity onPress={() => console.log('Esqueceu a senha?')}>
+          <TouchableOpacity >
             <Text style={styles.forgot}>Esqueceu sua senha?</Text>
           </TouchableOpacity>
 
