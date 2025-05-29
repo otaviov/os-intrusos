@@ -8,11 +8,13 @@ import {
   Keyboard,
   KeyboardAvoidingView,
   Platform,
+  Pressable,
   ScrollView,
   StyleSheet,
   Text,
   TextInput,
   TouchableOpacity,
+  TouchableWithoutFeedback,
   View
 } from 'react-native';
 
@@ -127,111 +129,137 @@ export default function HomeScreen() {
       setDestino(item.nome);
       setMostrarSugestoesDestino(false);
     }
+    Keyboard.dismiss();
   };
 
-  const fecharSugestoes = (tipo: string) => {
-    if (tipo === 'origem') {
-      setMostrarSugestoesOrigem(false);
-    } else {
-      setMostrarSugestoesDestino(false);
-    }
+  const fecharSugestoes = () => {
+    setMostrarSugestoesOrigem(false);
+    setMostrarSugestoesDestino(false);
+    Keyboard.dismiss();
   };
 
   const buscarViagens = () => {
-    alert(`Buscando ${vagas} vaga(s) de ${origem} para ${destino} na data ${data}`);
+    router.push('/viagens');
   };
 
-  // Função para aumentar vagas (com limite de 8)
   const aumentarVagas = () => {
     setVagas(prev => prev < 8 ? prev + 1 : 8);
   };
-  // Função para diminuir vagas (mantendo seu código original)
+
   const diminuirVagas = () => {
     setVagas(prev => (prev > 1 ? prev - 1 : 1));
   };
 
   return (
-    <KeyboardAvoidingView
-      style={{ flex: 1 }}
-      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-    >
-      <ScrollView
-        contentContainerStyle={[styles.container, { minHeight: '100%' }]}
-        keyboardShouldPersistTaps="handled"
+    <TouchableWithoutFeedback onPress={fecharSugestoes}>
+      <KeyboardAvoidingView
+        style={{ flex: 1 }}
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
       >
-        {!keyboardVisible && (
-          <Image
-            source={require('../assets/images/in.png')}
-            style={styles.logo}
-          />
-        )}
-
-        <View style={styles.formContainer}>
-          <Text style={styles.title}>Where to today?</Text>
-          <Text style={styles.subtitle}>Escolha para onde você quer ir</Text>
-
-
-          {/* Campo de Origem */}
-          <View style={styles.inputWrapper}>
-            <TextInput
-              style={styles.input}
-              placeholder="Saindo de"
-              placeholderTextColor="#aaa"
-              value={origem}
-              onChangeText={(text) => handleChange(text, 'origem')}
-              onFocus={() => setMostrarSugestoesOrigem(true)}
-              autoCapitalize="none"
-              autoCorrect={false}
+        <ScrollView
+          contentContainerStyle={[styles.container, { minHeight: '100%' }]}
+          keyboardShouldPersistTaps="handled"
+        >
+          {!keyboardVisible && (
+            <Image
+              source={require('../assets/images/in.png')}
+              style={styles.logo}
             />
-            {mostrarSugestoesOrigem && sugestoesOrigem.length > 0 && (
-              <View style={styles.sugestoesContainer}>
-                <ScrollView 
-                nestedScrollEnabled 
-                style={{ maxHeight: 200 }}>
-                  keyboardShouldPersistTaps='handled'
+          )}
+
+          <View style={styles.formContainer}>
+            <Text style={styles.title}>Where to today?</Text>
+            <Text style={styles.subtitle}>Escolha para onde você quer ir</Text>
+
+            {/* Campo de Origem */}
+            <View style={styles.inputWrapper}>
+              <TextInput
+                style={styles.input}
+                placeholder="Saindo de"
+                placeholderTextColor="#aaa"
+                value={origem}
+                onChangeText={(text) => handleChange(text, 'origem')}
+                onFocus={() => {
+                  setMostrarSugestoesOrigem(true);
+                  setMostrarSugestoesDestino(false);
+                }}
+                autoCapitalize="none"
+                autoCorrect={false}
+              />
+              {mostrarSugestoesOrigem && sugestoesOrigem.length > 0 && (
+                <Pressable 
+                  style={styles.sugestoesContainer}
+                  onStartShouldSetResponder={() => true}
+                >
+                  <ScrollView
+                    style={styles.sugestoes}
+                    nestedScrollEnabled
+                    keyboardShouldPersistTaps="always"
                   >
-                  {sugestoesOrigem.map((item, index) => (
-                    <TouchableOpacity
-                      key={index.toString()}
-                      onPress={() => selecionarSugestao(item, 'origem')}
-                    >
-                      <Text style={styles.sugestao}>{item.nome}</Text>
-                    </TouchableOpacity>
-                  ))}
-                </ScrollView>
-              </View>
-            )}
-          </View>
+                    {sugestoesOrigem.map((item, index) => (
+                      <TouchableOpacity 
+                        key={index.toString()}
+                        onPress={() => selecionarSugestao(item, 'origem')}
+                      >
+                        <Text style={styles.sugestao}>{item.nome}</Text>
+                      </TouchableOpacity>
+                    ))}
+                  </ScrollView>
+                  <TouchableOpacity
+                    style={styles.fecharSugestoes}
+                    onPress={() => setMostrarSugestoesOrigem(false)}
+                  >
+                    <Text style={styles.fecharTexto}>Voltar</Text>
+                  </TouchableOpacity>
+                </Pressable>
+              )}
+            </View>
 
-          {/* Campo de Destino */}
-          <View style={styles.inputWrapper}>
-            <TextInput
-              style={styles.input}
-              placeholder="Indo para"
-              placeholderTextColor="#aaa"
-              value={destino}
-              onChangeText={(text) => handleChange(text, 'destino')}
-              onFocus={() => setMostrarSugestoesDestino(true)}
-              autoCapitalize="none"
-              autoCorrect={false}
-            />
-            {mostrarSugestoesDestino && sugestoesDestino.length > 0 && (
-              <View style={styles.sugestoesContainer}>
-                <ScrollView needsOffscreenAlphaCompositing style={{ maxHeight: 200 }}>
-                  {sugestoesDestino.map((item, index) => (
-                    <TouchableOpacity
-                      key={index.toString()}
-                      onPress={() => selecionarSugestao(item, 'destino')}
-                    >
-                      <Text style={styles.sugestao}>{item.nome}</Text>
-                    </TouchableOpacity>
-                  ))}
-                </ScrollView>
-              </View>
-            )}
-          </View>
+            {/* Campo de Destino */}
+            <View style={styles.inputWrapper}>
+              <TextInput
+                style={styles.input}
+                placeholder="Indo para"
+                placeholderTextColor="#aaa"
+                value={destino}
+                onChangeText={(text) => handleChange(text, 'destino')}
+                onFocus={() => {
+                  setMostrarSugestoesDestino(true);
+                  setMostrarSugestoesOrigem(false);
+                }}
+                autoCapitalize="none"
+                autoCorrect={false}
+              />
+              {mostrarSugestoesDestino && sugestoesDestino.length > 0 && (
+                <Pressable
+                  style={styles.sugestoesContainer}
+                  onStartShouldSetResponder={() => true}
+                >
+                  <ScrollView
+                    style={styles.sugestoes}
+                    nestedScrollEnabled
+                    keyboardShouldPersistTaps="always"
+                  >
+                    {sugestoesDestino.map((item, index) => (
+                      <TouchableOpacity 
+                        key={index.toString()}
+                        onPress={() => selecionarSugestao(item, 'destino')}
+                      >
+                        <Text style={styles.sugestao}>{item.nome}</Text>
+                      </TouchableOpacity>
+                    ))}
+                  </ScrollView>
+                  <TouchableOpacity
+                    style={styles.fecharSugestoes}
+                    onPress={() => setMostrarSugestoesDestino(false)}
+                  >
+                    <Text style={styles.fecharTexto}>Voltar</Text>
+                  </TouchableOpacity>
+                </Pressable>
+              )}
+            </View>
 
-          {/* Campo de Data */}
+            {/* Campo de Data */}
             <View style={{ marginBottom: 10 }}>
               <TouchableOpacity onPress={() => setShowDatePicker(true)} style={styles.input}>
                 <Text style={{ color: data ? '#000' : '#aaa' }}>
@@ -256,7 +284,7 @@ export default function HomeScreen() {
               <TouchableOpacity
                 onPress={diminuirVagas}
                 style={styles.vagasBotao}
-                disabled={vagas <= 1} // Desabilita se for 1
+                disabled={vagas <= 1}
               >
                 <Text style={[styles.vagasLabel, vagas <= 1 && styles.disabled]}>-</Text>
               </TouchableOpacity>
@@ -268,19 +296,20 @@ export default function HomeScreen() {
               <TouchableOpacity
                 onPress={aumentarVagas}
                 style={styles.vagasBotao}
-                disabled={vagas >= 8} // Desabilita se for 8
+                disabled={vagas >= 8}
               >
                 <Text style={[styles.vagasLabel, vagas >= 8 && styles.disabled]}>+</Text>
               </TouchableOpacity>
             </View>
 
             {/* Botão Buscar */}
-            <TouchableOpacity style={styles.botao} onPress={() => router.push('/viagens')}>
+            <TouchableOpacity style={styles.botao} onPress={buscarViagens}>
               <Text style={styles.textoBotao}>Buscar Viagem</Text>
             </TouchableOpacity>
           </View>
-      </ScrollView>
-    </KeyboardAvoidingView>
+        </ScrollView>
+      </KeyboardAvoidingView>
+    </TouchableWithoutFeedback>
   );
 }
 
@@ -316,7 +345,7 @@ const styles = StyleSheet.create({
   },
   inputWrapper: {
     position: 'relative',
-    //marginBottom: 24,
+    marginBottom: 24,
   },
   input: {
     height: 35,
@@ -325,7 +354,6 @@ const styles = StyleSheet.create({
     paddingVertical: 5,
     paddingHorizontal: 12,
     fontSize: 16,
-    marginBottom: 16,
   },
   sugestoesContainer: {
     position: 'absolute',
@@ -365,7 +393,6 @@ const styles = StyleSheet.create({
     marginBottom: 50,
     borderBottomWidth: 1,
     borderColor: '#ccc',
-    //paddingVertical: 5,
   },
   vagasBotao: {
     paddingHorizontal: 15,
@@ -383,7 +410,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
   disabled: {
-    color: '#ccc', // Cor mais clara quando desabilitado
+    color: '#ccc',
   },
   botao: {
     backgroundColor: '#111',
