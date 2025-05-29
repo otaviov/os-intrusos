@@ -1,8 +1,9 @@
 // home.tsx
+import DateTimePicker from '@react-native-community/datetimepicker';
 import axios from 'axios';
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useRouter } from 'expo-router';
+import { SetStateAction, useCallback, useEffect, useRef, useState } from 'react';
 import {
-  FlatList,
   Image,
   Keyboard,
   KeyboardAvoidingView,
@@ -17,16 +18,16 @@ import {
 
 const chaveAPI = 'pk.60997858859c4d9a1cf9c77d4b8dca83';
 
-const buscarLocalizacoes = async (texto, limite = 10) => {
+const buscarLocalizacoes = async (texto: string | number | boolean, limite = 10) => {
   try {
     const response = await axios.get(
-      `https://us1.locationiq.com/v1/search.php?key=${chaveAPI}&q=${encodeURIComponent(texto)}&format=json&countrycodes=BR&limit=${limite}`
+      `https://us1.locationiq.com/v1/autocomplete.php?key=${chaveAPI}&q=${texto}&format=json&countrycodes=BR&limit=${limite}`
     );
 
     if (response.data && response.data.length > 0) {
-      return response.data.map((item) => {
+      return response.data.map((item: { display_name: string; lat: any; lon: any; }) => {
         const nome = item.display_name || '';
-        const partes = nome.split(',').map((parte) => parte.trim());
+        const partes = nome.split(',').map((parte: string) => parte.trim());
         const cidade = partes[0];
         let estado = partes.length > 3 ? partes[3] : '';
 
@@ -51,9 +52,12 @@ const buscarLocalizacoes = async (texto, limite = 10) => {
 };
 
 export default function HomeScreen() {
+  const router = useRouter();
+
   const [origem, setOrigem] = useState('');
   const [destino, setDestino] = useState('');
-  const [data, setData] = useState('');
+  const [data, setData] = useState(null);
+  const [showDatePicker, setShowDatePicker] = useState(false);
   const [vagas, setVagas] = useState(1);
   const [sugestoesOrigem, setSugestoesOrigem] = useState([]);
   const [sugestoesDestino, setSugestoesDestino] = useState([]);
@@ -73,7 +77,7 @@ export default function HomeScreen() {
     };
   }, []);
 
-  const buscarCidades = async (texto, tipo) => {
+  const buscarCidades = async (texto: string, tipo: string) => {
     if (texto.trim() === '') return;
     if (carregando.current) return;
 
@@ -94,7 +98,7 @@ export default function HomeScreen() {
     }
   };
 
-  const handleChange = useCallback((text, tipo) => {
+  const handleChange = useCallback((text: SetStateAction<string>, tipo: string) => {
     if (debounceTimeout.current) {
       clearTimeout(debounceTimeout.current);
     }
@@ -115,7 +119,7 @@ export default function HomeScreen() {
     }, 700);
   }, []);
 
-  const selecionarSugestao = (item, tipo) => {
+  const selecionarSugestao = (item: never, tipo: string) => {
     if (tipo === 'origem') {
       setOrigem(item.nome);
       setMostrarSugestoesOrigem(false);
@@ -125,7 +129,7 @@ export default function HomeScreen() {
     }
   };
 
-  const fecharSugestoes = (tipo) => {
+  const fecharSugestoes = (tipo: string) => {
     if (tipo === 'origem') {
       setMostrarSugestoesOrigem(false);
     } else {
@@ -181,22 +185,20 @@ export default function HomeScreen() {
             />
             {mostrarSugestoesOrigem && sugestoesOrigem.length > 0 && (
               <View style={styles.sugestoesContainer}>
-                <FlatList
-                  style={styles.sugestoes}
-                  data={sugestoesOrigem}
-                  keyExtractor={(item, index) => index.toString()}
-                  renderItem={({ item }) => (
-                    <TouchableOpacity onPress={() => selecionarSugestao(item, 'origem')}>
+                <ScrollView 
+                nestedScrollEnabled 
+                style={{ maxHeight: 200 }}>
+                  keyboardShouldPersistTaps='handled'
+                  >
+                  {sugestoesOrigem.map((item, index) => (
+                    <TouchableOpacity
+                      key={index.toString()}
+                      onPress={() => selecionarSugestao(item, 'origem')}
+                    >
                       <Text style={styles.sugestao}>{item.nome}</Text>
                     </TouchableOpacity>
-                  )}
-                />
-                <TouchableOpacity
-                  style={styles.fecharSugestoes}
-                  onPress={() => fecharSugestoes('origem')}
-                >
-                  <Text style={styles.fecharTexto}>Voltar</Text>
-                </TouchableOpacity>
+                  ))}
+                </ScrollView>
               </View>
             )}
           </View>
@@ -215,63 +217,68 @@ export default function HomeScreen() {
             />
             {mostrarSugestoesDestino && sugestoesDestino.length > 0 && (
               <View style={styles.sugestoesContainer}>
-                <FlatList
-                  style={styles.sugestoes}
-                  data={sugestoesDestino}
-                  keyExtractor={(item, index) => index.toString()}
-                  renderItem={({ item }) => (
-                    <TouchableOpacity onPress={() => selecionarSugestao(item, 'destino')}>
+                <ScrollView needsOffscreenAlphaCompositing style={{ maxHeight: 200 }}>
+                  {sugestoesDestino.map((item, index) => (
+                    <TouchableOpacity
+                      key={index.toString()}
+                      onPress={() => selecionarSugestao(item, 'destino')}
+                    >
                       <Text style={styles.sugestao}>{item.nome}</Text>
                     </TouchableOpacity>
-                  )}
-                />
-                <TouchableOpacity
-                  style={styles.fecharSugestoes}
-                  onPress={() => fecharSugestoes('destino')}
-                >
-                  <Text style={styles.fecharTexto}>Voltar</Text>
-                </TouchableOpacity>
+                  ))}
+                </ScrollView>
               </View>
             )}
           </View>
 
           {/* Campo de Data */}
-          <TextInput
-            style={styles.input}
-            placeholder="Data"
-            placeholderTextColor="#aaa"
-            value={data}
-            onChangeText={setData}
-          />
-
-          {/* Campo de Vagas */}
-          <View style={styles.vagasContainer}>
-            <TouchableOpacity
-              onPress={diminuirVagas}
-              style={styles.vagasBotao}
-              disabled={vagas <= 1} // Desabilita se for 1
-            >
-              <Text style={[styles.vagasLabel, vagas <= 1 && styles.disabled]}>-</Text>
-            </TouchableOpacity>
-
-            <View style={styles.vagasDisplay}>
-              <Text style={styles.vagasNumero}>{vagas}</Text>
+            <View style={{ marginBottom: 10 }}>
+              <TouchableOpacity onPress={() => setShowDatePicker(true)} style={styles.input}>
+                <Text style={{ color: data ? '#000' : '#aaa' }}>
+                  {data ? new Date(data).toLocaleDateString('pt-BR') : 'Data'}
+                </Text>
+              </TouchableOpacity>
+              {showDatePicker && (
+                <DateTimePicker
+                  value={data ? new Date(data) : new Date()}
+                  mode="date"
+                  display="default"
+                  onChange={(event, selectedDate) => {
+                    setShowDatePicker(false);
+                    if (selectedDate) setData(selectedDate.toISOString());
+                  }}
+                />
+              )}
             </View>
 
-            <TouchableOpacity
-              onPress={aumentarVagas}
-              style={styles.vagasBotao}
-              disabled={vagas >= 8} // Desabilita se for 8
-            >
-              <Text style={[styles.vagasLabel, vagas >= 8 && styles.disabled]}>+</Text>
+            {/* Campo de Vagas */}
+            <View style={styles.vagasContainer}>
+              <TouchableOpacity
+                onPress={diminuirVagas}
+                style={styles.vagasBotao}
+                disabled={vagas <= 1} // Desabilita se for 1
+              >
+                <Text style={[styles.vagasLabel, vagas <= 1 && styles.disabled]}>-</Text>
+              </TouchableOpacity>
+
+              <View style={styles.vagasDisplay}>
+                <Text style={styles.vagasNumero}>{vagas}</Text>
+              </View>
+
+              <TouchableOpacity
+                onPress={aumentarVagas}
+                style={styles.vagasBotao}
+                disabled={vagas >= 8} // Desabilita se for 8
+              >
+                <Text style={[styles.vagasLabel, vagas >= 8 && styles.disabled]}>+</Text>
+              </TouchableOpacity>
+            </View>
+
+            {/* Botão Buscar */}
+            <TouchableOpacity style={styles.botao} onPress={() => router.push('/viagens')}>
+              <Text style={styles.textoBotao}>Buscar Viagem</Text>
             </TouchableOpacity>
           </View>
-
-          {/* Botão Buscar */}
-          <TouchableOpacity style={styles.botao} onPress={buscarViagens}>
-            <Text style={styles.textoBotao}>Buscar Viagem</Text>
-          </TouchableOpacity>
-        </View>
       </ScrollView>
     </KeyboardAvoidingView>
   );

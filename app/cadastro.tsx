@@ -40,7 +40,7 @@ export default function Cadastro() {
 
   const [aceitaTermos, setAceitaTermos] = useState(false);
 
-  const handleChange = (field, value) => {
+  const handleChange = (field: string, value: string) => {
     setForm({ ...form, [field]: value });
   };
 
