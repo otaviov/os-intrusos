@@ -268,7 +268,7 @@ const styles = StyleSheet.create({
     iconeRota: {
         width: 20,
         height: 20,
-        tintColor: '#000',
+        //tintColor: '#000',
     },
     cidade: {
         fontSize: 16,
@@ -282,6 +282,6 @@ const styles = StyleSheet.create({
     iconePonto: {
         width: 16,
         height: 16,
-        tintColor: '#555',
+        //tintColor: '#555',
     },
 });
