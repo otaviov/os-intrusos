@@ -2,7 +2,7 @@
 import DateTimePicker from '@react-native-community/datetimepicker';
 import axios from 'axios';
 import { useRouter } from 'expo-router';
-import { SetStateAction, useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import {
   Image,
   Keyboard,
@@ -13,10 +13,17 @@ import {
   StyleSheet,
   Text,
   TextInput,
+  TextStyle,
   TouchableOpacity,
   TouchableWithoutFeedback,
   View
 } from 'react-native';
+
+type Localizacao = {
+  nome: string;
+  latitude: string;
+  longitude: string;
+};
 
 const chaveAPI = 'pk.60997858859c4d9a1cf9c77d4b8dca83';
 
@@ -47,27 +54,32 @@ const buscarLocalizacoes = async (texto: string | number | boolean, limite = 10)
       console.log('Nenhum resultado encontrado para:', texto);
       return [];
     }
-  } catch (error) {
-    console.error('Erro ao buscar localizações:', error.message);
-    return [];
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      console.error('Erro ao buscar localizações:', error.message);
+    } else {
+      console.error('Erro desconhecido ao buscar localizações:', error);
+    }
   }
 };
 
 export default function HomeScreen() {
   const router = useRouter();
 
+  
+
   const [origem, setOrigem] = useState('');
   const [destino, setDestino] = useState('');
-  const [data, setData] = useState(null);
+  const [data, setData] = useState<string | null>(null);
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [vagas, setVagas] = useState(1);
-  const [sugestoesOrigem, setSugestoesOrigem] = useState([]);
-  const [sugestoesDestino, setSugestoesDestino] = useState([]);
+  const [sugestoesOrigem, setSugestoesOrigem] = useState<Localizacao[]>([]);
+  const [sugestoesDestino, setSugestoesDestino] = useState<Localizacao[]>([]);
   const [mostrarSugestoesOrigem, setMostrarSugestoesOrigem] = useState(false);
   const [mostrarSugestoesDestino, setMostrarSugestoesDestino] = useState(false);
   const [keyboardVisible, setKeyboardVisible] = useState(false);
 
-  const debounceTimeout = useRef(null);
+  const debounceTimeout = useRef<NodeJS.Timeout | null>(null);
   const carregando = useRef(false);
 
   useEffect(() => {
@@ -100,7 +112,7 @@ export default function HomeScreen() {
     }
   };
 
-  const handleChange = useCallback((text: SetStateAction<string>, tipo: string) => {
+  const handleChange = useCallback((text: string, tipo: string) => {
     if (debounceTimeout.current) {
       clearTimeout(debounceTimeout.current);
     }
@@ -121,7 +133,7 @@ export default function HomeScreen() {
     }, 700);
   }, []);
 
-  const selecionarSugestao = (item: never, tipo: string) => {
+  const selecionarSugestao = (item: Localizacao, tipo: string) => {
     if (tipo === 'origem') {
       setOrigem(item.nome);
       setMostrarSugestoesOrigem(false);
@@ -187,7 +199,7 @@ export default function HomeScreen() {
                 autoCorrect={false}
               />
               {mostrarSugestoesOrigem && sugestoesOrigem.length > 0 && (
-                <Pressable 
+                <Pressable
                   style={styles.sugestoesContainer}
                   onStartShouldSetResponder={() => true}
                 >
@@ -197,13 +209,14 @@ export default function HomeScreen() {
                     keyboardShouldPersistTaps="always"
                   >
                     {sugestoesOrigem.map((item, index) => (
-                      <TouchableOpacity 
+                      <TouchableOpacity
                         key={index.toString()}
                         onPress={() => selecionarSugestao(item, 'origem')}
                       >
                         <Text style={styles.sugestao}>{item.nome}</Text>
                       </TouchableOpacity>
                     ))}
+
                   </ScrollView>
                   <TouchableOpacity
                     style={styles.fecharSugestoes}
@@ -241,7 +254,7 @@ export default function HomeScreen() {
                     keyboardShouldPersistTaps="always"
                   >
                     {sugestoesDestino.map((item, index) => (
-                      <TouchableOpacity 
+                      <TouchableOpacity
                         key={index.toString()}
                         onPress={() => selecionarSugestao(item, 'destino')}
                       >
@@ -326,6 +339,7 @@ const styles = StyleSheet.create({
     height: 180,
     resizeMode: 'contain',
     alignSelf: 'center',
+    overflow: 'hidden',
   },
   formContainer: {
     flex: 1,
@@ -389,7 +403,7 @@ const styles = StyleSheet.create({
   vagasContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'right',
+    //justifyContent: 'right',
     marginBottom: 50,
     borderBottomWidth: 1,
     borderColor: '#ccc',
@@ -411,7 +425,7 @@ const styles = StyleSheet.create({
   },
   disabled: {
     color: '#ccc',
-  },
+  } as TextStyle,
   botao: {
     backgroundColor: '#111',
     padding: 14,
