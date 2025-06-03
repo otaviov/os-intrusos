@@ -66,7 +66,7 @@ const buscarLocalizacoes = async (texto: string | number | boolean, limite = 10)
 export default function HomeScreen() {
   const router = useRouter();
 
-  
+
 
   const [origem, setOrigem] = useState('');
   const [destino, setDestino] = useState('');
@@ -316,9 +316,20 @@ export default function HomeScreen() {
             </View>
 
             {/* Botão Buscar */}
-            <TouchableOpacity style={styles.botao} onPress={buscarViagens}>
+            <TouchableOpacity
+              style={styles.botao}
+              onPress={() => router.push({
+                pathname: '/viagens',
+                params: {
+                  origem: origem,
+                  destino: destino,
+                  data: data
+                }
+              })}
+            >
               <Text style={styles.textoBotao}>Buscar Viagem</Text>
             </TouchableOpacity>
+
           </View>
         </ScrollView>
       </KeyboardAvoidingView>

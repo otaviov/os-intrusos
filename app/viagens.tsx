@@ -1,5 +1,5 @@
-import { useRouter } from 'expo-router';
-import React, { useEffect, useState } from 'react';
+import { useLocalSearchParams, useRouter } from 'expo-router';
+import React from 'react';
 import { Image, SafeAreaView, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
 const viagens = [
@@ -70,18 +70,10 @@ const viagens = [
 
 export default function Viagens() {
   const router = useRouter();
-
-  // Adicione estes estados para receber os parâmetros da tela anterior
-  const [origem, setOrigem] = useState('');
-  const [destino, setDestino] = useState('');
-
-  // Efeito para pegar os parâmetros da navegação
-  useEffect(() => {
-    if (router.params) {
-      setOrigem(router.params.origem || '');
-      setDestino(router.params.destino || '');
-    }
-  }, [router.params]);
+  const { origem = '', destino = '' } = useLocalSearchParams() as {
+    origem?: string;
+    destino?: string;
+  };
 
   return (
     <SafeAreaView style={styles.safeArea}>
@@ -109,7 +101,14 @@ export default function Viagens() {
 
         <ScrollView contentContainerStyle={styles.scrollContainer}>
           {viagens.map((v) => (
-            <View key={v.id} style={styles.card}>
+            <TouchableOpacity 
+            key={v.id} 
+      onPress={() => router.push({ 
+        pathname: "/detalhes-viagem", 
+        params: { viagem: JSON.stringify(v) } 
+      })}
+    >
+      <View style={styles.card}>
               <View style={styles.horarioContainer}>
                 <View style={styles.horarioInfo}>
                   <View style={styles.horaContainer}>
@@ -148,6 +147,7 @@ export default function Viagens() {
                 </View>
               </View>
             </View>
+            </TouchableOpacity>
           ))}
         </ScrollView>
 
@@ -253,35 +253,34 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   rotaContainer: {
-        flexDirection: 'row',
-        justifyContent: 'space-around',
-        marginBottom: 20,
-        padding: 15,
-        backgroundColor: '#f5f5f5',
-        borderRadius: 10,
-    },
-    rotaItem: {
-        alignItems: 'center',
-        flexDirection: 'row',
-        gap: 8,
-    },
-    iconeRota: {
-        width: 20,
-        height: 20,
-        //tintColor: '#000',
-    },
-    cidade: {
-        fontSize: 16,
-        fontWeight: '600',
-    },
-    horaContainer: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        gap: 5,
-    },
-    iconePonto: {
-        width: 16,
-        height: 16,
-        //tintColor: '#555',
-    },
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    marginBottom: 20,
+    padding: 15,
+    backgroundColor: '#f5f5f5',
+    borderRadius: 10,
+  },
+  rotaItem: {
+    alignItems: 'center',
+    flexDirection: 'row',
+    gap: 8,
+  },
+  iconeRota: {
+    width: 20,
+    height: 20,
+
+  },
+  cidade: {
+    fontSize: 16,
+    fontWeight: '600',
+  },
+  horaContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 5,
+  },
+  iconePonto: {
+    width: 16,
+    height: 16,
+  },
 });
