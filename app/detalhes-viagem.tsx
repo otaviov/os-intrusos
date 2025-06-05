@@ -12,6 +12,7 @@ export default function DetalhesViagem() {
       <SafeAreaView style={styles.safeArea}>
         <Text>Nenhuma informação de viagem disponível</Text>
       </SafeAreaView>
+
     );
   }
 
@@ -19,7 +20,8 @@ export default function DetalhesViagem() {
     <SafeAreaView style={styles.safeArea}>
       <ScrollView contentContainerStyle={styles.container}>
         <View style={styles.header}>
-          <Text style={styles.title}>Detalhes da Viagem</Text>
+          <Text style={styles.title}>Confira detalhes da sua reserva</Text>
+          <Text style={styles.subtitle}>Terça-Feira, 3 de Junho [colocar data da viagem]</Text>
         </View>
 
         <View style={styles.card}>
@@ -41,15 +43,9 @@ export default function DetalhesViagem() {
             </View>
           </View>
 
-          <View style={styles.infoRow}>
-            <Image source={viagemData.icone} style={styles.carroImg} />
-            <Text style={styles.carro}>{viagemData.carro}</Text>
-          </View>
-
-          <Text style={styles.preco}>Preço: {viagemData.preco}</Text>
+          <Text style={styles.preco}>Preços {viagemData.preco}</Text>
 
           <View style={styles.detalhesSection}>
-            <Text style={styles.sectionTitle}>Serviços incluídos:</Text>
             <View style={styles.servicosContainer}>
               <View style={styles.servicoItem}>
                 <Image source={require('../assets/images/patas.png')} style={styles.iconeServico} />
@@ -65,20 +61,19 @@ export default function DetalhesViagem() {
               </View>
             </View>
           </View>
+
+          <View style={styles.infoRow}>
+            <Image source={viagemData.icone} style={styles.carroImg} />
+            <Text style={styles.carro}>{viagemData.carro}</Text>
+          </View>
+
         </View>
 
-        <TouchableOpacity 
+        <TouchableOpacity
           style={styles.botaoReservar}
           onPress={() => alert('Reserva confirmada!')}
         >
           <Text style={styles.botaoTexto}>Reservar Viagem</Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity 
-          style={styles.botaoVoltar}
-          onPress={() => router.back()}
-        >
-          <Text style={styles.botaoTexto}>Voltar</Text>
         </TouchableOpacity>
       </ScrollView>
     </SafeAreaView>
@@ -91,61 +86,60 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
   },
   container: {
-    padding: 20,
+    padding: 16,
     paddingBottom: 100,
   },
   header: {
-    marginBottom: 20,
+    //marginBottom: 20,
+    padding: 16,
   },
   title: {
-    fontSize: 24,
+    fontSize: 25,
     fontWeight: 'bold',
-    textAlign: 'center',
+    textAlign: 'left',
+    marginVertical: 30,
+    marginBottom: 15,
+    color: '#1E293B',
+  },
+  subtitle: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    color: '#828282',
+
   },
   card: {
     backgroundColor: '#f9f9f9',
-    padding: 20,
+    padding: 16,
     borderRadius: 15,
-    marginBottom: 20,
+    marginBottom: 16,
     shadowColor: '#000',
-    shadowOpacity: 0.1,
+    shadowOpacity: 0.05,
     shadowOffset: { width: 0, height: 2 },
     elevation: 5,
   },
   horarioContainer: {
-    flexDirection: 'row',
+    flexDirection: 'column',
     justifyContent: 'space-between',
-    alignItems: 'center',
-    marginBottom: 15,
+    marginBottom: 8,
   },
   horaContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 8,
+    gap: 4,
   },
   hora: {
-    fontSize: 18,
+    fontSize: 16,
     fontWeight: 'bold',
   },
   tempo: {
-    fontSize: 14,
+    fontSize: 12,
     color: '#888',
   },
-  infoRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 10,
-    marginBottom: 15,
+  iconePonto: {
+    width: 16,
+    height: 16,
   },
-  carroImg: {
-    width: 50,
-    height: 30,
-    resizeMode: 'contain',
-  },
-  carro: {
-    fontSize: 16,
-    fontWeight: '600',
-  },
+  
   preco: {
     fontSize: 18,
     fontWeight: 'bold',
@@ -154,11 +148,6 @@ const styles = StyleSheet.create({
   },
   detalhesSection: {
     marginTop: 15,
-  },
-  sectionTitle: {
-    fontSize: 16,
-    fontWeight: 'bold',
-    marginBottom: 10,
   },
   servicosContainer: {
     gap: 10,
@@ -172,21 +161,26 @@ const styles = StyleSheet.create({
     width: 24,
     height: 24,
   },
+  infoRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 10,
+    marginVertical: 50,
+  },
+  carroImg: {
+    width: 50,
+    height: 30,
+    resizeMode: 'contain',
+  },
+  carro: {
+    fontSize: 16,
+    fontWeight: '600',
+  },
   botaoReservar: {
     backgroundColor: '#4CAF50',
     padding: 16,
     borderRadius: 8,
     alignItems: 'center',
     marginBottom: 15,
-  },
-  botaoVoltar: {
-    backgroundColor: '#111',
-    padding: 16,
-    borderRadius: 8,
-    alignItems: 'center',
-  },
-  botaoTexto: {
-    color: '#fff',
-    fontWeight: 'bold',
   },
 });

@@ -176,7 +176,7 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: 'bold',
     marginBottom: 20,
-    marginVertical: 20,
+    marginVertical: 30,
     textAlign: 'center',
   },
   card: {
@@ -268,7 +268,6 @@ const styles = StyleSheet.create({
   iconeRota: {
     width: 20,
     height: 20,
-
   },
   cidade: {
     fontSize: 16,
