@@ -104,11 +104,11 @@ export default function DetalhesViagem() {
 
           <View style={styles.section}>
             <View style={styles.servicoItem}>
-              <Image source={require('../assets/images/whatsapp.png')} style={styles.iconeServico} />
+              <Image source={require('../assets/images/whatsapp.png')} style={styles.iconeContato} />
               <Text>Nosso Whatsapp</Text>
             </View>
             <View style={styles.servicoItem}>
-              <Image source={require('../assets/images/email.png')} style={styles.iconeServico} />
+              <Image source={require('../assets/images/email.png')} style={styles.iconeContato} />
               <Text>Nosso E-mail</Text>
             </View>
           </View>
@@ -214,6 +214,11 @@ const styles = StyleSheet.create({
   infoText: {
     marginBottom: 20,
     color: '#666',
+  },
+  iconeContato: {
+    width: 24,
+    height: 24,
+    marginRight: 10,
   },
   botaoReservar: {
     backgroundColor: '#111',
