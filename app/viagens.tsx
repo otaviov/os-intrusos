@@ -7,7 +7,7 @@ const viagens = [
     id: 1,
     horaSaida: '08:00',
     horaChegada: '08:50',
-    preco: '18,00 R$',
+    preco: 'R$ 18,00',
     carro: 'Hyundai Creta',
     tempo: '0h50',
     icone: require('../assets/images/carro-suv.png'),
@@ -16,7 +16,7 @@ const viagens = [
     id: 2,
     horaSaida: '10:30',
     horaChegada: '11:45',
-    preco: '20,00 R$',
+    preco: 'R$ 20,00',
     carro: 'Renault Sandero',
     tempo: '1h15',
     icone: require('../assets/images/carro-4portas.png'),
@@ -25,7 +25,7 @@ const viagens = [
     id: 3,
     horaSaida: '11:00',
     horaChegada: '11:55',
-    preco: '15,50 R$',
+    preco: 'R$ 15,50',
     carro: 'Fiat Doblo',
     tempo: '0h55',
     icone: require('../assets/images/minivan.png'),
@@ -34,7 +34,7 @@ const viagens = [
     id: 4,
     horaSaida: '12:00',
     horaChegada: '13:30',
-    preco: '25,00 R$',
+    preco: 'R$ 25,00',
     carro: 'Hyundai HB20',
     tempo: '1h30',
     icone: require('../assets/images/carro-4portas.png'),
@@ -43,7 +43,7 @@ const viagens = [
     id: 5,
     horaSaida: '13:00',
     horaChegada: '13:30',
-    preco: '10,00 R$',
+    preco: 'R$ 10,00',
     carro: 'Chevrolet Tracker',
     tempo: '0h30',
     icone: require('../assets/images/carro-suv.png'),
@@ -52,7 +52,7 @@ const viagens = [
     id: 6,
     horaSaida: '14:30',
     horaChegada: '15:30',
-    preco: '30,00 R$',
+    preco: 'R$ 30,00',
     carro: 'Fiat Pulse',
     tempo: '2h00',
     icone: require('../assets/images/carro-suv.png'),
@@ -61,7 +61,7 @@ const viagens = [
     id: 7,
     horaSaida: '15:00',
     horaChegada: '18:30',
-    preco: '55,00 R$',
+    preco: 'R$ 55,00',
     carro: 'Hyundai Chevrolet Spin',
     tempo: '3h30',
     icone: require('../assets/images/minivan.png'),
@@ -105,7 +105,7 @@ export default function Viagens() {
             key={v.id} 
       onPress={() => router.push({ 
         pathname: "/detalhes-viagem", 
-        params: { viagem: JSON.stringify(v) } 
+        params: { viagem: JSON.stringify(v)} 
       })}
     >
       <View style={styles.card}>
@@ -181,13 +181,13 @@ const styles = StyleSheet.create({
   },
   card: {
     backgroundColor: '#f9f9f9',
-    padding: 16,
+    padding: 15,
     borderRadius: 15,
-    marginBottom: 16,
+    marginBottom: 10,
     shadowColor: '#000',
     shadowOpacity: 0.05,
     shadowOffset: { width: 0, height: 2 },
-    elevation: 5,
+    elevation: 3,
   },
   horarioContainer: {
     flexDirection: 'row',

@@ -5,6 +5,7 @@ import { Image, SafeAreaView, ScrollView, StyleSheet, Text, TouchableOpacity, Vi
 export default function DetalhesViagem() {
   const router = useRouter();
   const { viagem } = useLocalSearchParams() as { viagem?: string };
+
   const viagemData = viagem ? JSON.parse(viagem) : null;
 
   if (!viagemData) {
@@ -14,6 +15,14 @@ export default function DetalhesViagem() {
       </SafeAreaView>
     );
   }
+
+  // Função para formatar o preço
+  const formatarPreco = (preco: string) => {
+    // Se já contém R$, retorna como está
+    if (preco.includes('R$')) return preco;
+    // Caso contrário, formata com R$
+    return `R$ ${preco}`;
+  };
 
   return (
     <SafeAreaView style={styles.safeArea}>
@@ -42,45 +51,56 @@ export default function DetalhesViagem() {
             </View>
           </View>
 
+          <View style={{ height: 30 }} />
           <View style={styles.section}>
             <Text style={styles.sectionTitle}>Preços</Text>
+            <View style={{ height: 5 }} />
             <View style={styles.precoItem}>
               <Text>2 reservas</Text>
-              <Text>R$ 36,00</Text>
+              <View style={styles.precoValorContainer}>
+                <Text style={styles.precoValor}>{formatarPreco(viagemData.preco)}</Text>
+                <Image source={require('../assets/images/detalhes.png')} style={styles.iconePreco} />
+              </View>
             </View>
+            <View style={{ height: 10 }} />
             <View style={styles.precoItem}>
               <Text>Valores de taxas de serviço</Text>
-              <Text>R$ 0,00</Text>
+              <View style={styles.precoValorContainer}>
+                <Text style={styles.precoValor}>R$ 0,00</Text>
+                <Image source={require('../assets/images/detalhes.png')} style={styles.iconePreco} />
+              </View>
             </View>
           </View>
 
-          <View style={styles.section}>
-            <View style={styles.servicoItem}>
-              <Image source={require('../assets/images/patas.png')} style={styles.iconeServico} />
-              <Text>Proibido animais</Text>
+          <View style={styles.linhaServicos}>
+            <View style={styles.colunaServicos}>
+              <View style={styles.servicoItem}>
+                <Image source={require('../assets/images/patas.png')} style={styles.iconeServico} />
+                <Text style={styles.textServicos}>Proibido animais</Text>
+              </View>
+              <View style={styles.servicoItem}>
+                <Image source={require('../assets/images/wi-fi.png')} style={styles.iconeServico} />
+                <Text style={styles.textServicos}>Wi-fi Disponível</Text>
+              </View>
+              <View style={styles.servicoItem}>
+                <Image source={require('../assets/images/tomada.png')} style={styles.iconeServico} />
+                <Text style={styles.textServicos}>Carregadores USB</Text>
+              </View>
             </View>
-            <View style={styles.servicoItem}>
-              <Image source={require('../assets/images/wi-fi.png')} style={styles.iconeServico} />
-              <Text>WI-fi disponível</Text>
-            </View>
-            <View style={styles.servicoItem}>
-              <Image source={require('../assets/images/tomada.png')} style={styles.iconeServico} />
-              <Text>Carregadores usb</Text>
-            </View>
-          </View>
 
-          <View style={styles.section}>
-            <View style={styles.servicoItem}>
-              <Image source={require('../assets/images/patas.png')} style={styles.iconeServico} />
-              <Text>Proibido animais</Text>
-            </View>
-            <View style={styles.servicoItem}>
-              <Image source={require('../assets/images/ar-condicionado.png')} style={styles.iconeServico} />
-              <Text>Ar-condicionado</Text>
-            </View>
-            <View style={styles.servicoItem}>
-              <Image source={require('../assets/images/comida-nao.png')} style={styles.iconeServico} />
-              <Text>Comida não</Text>
+            <View style={styles.colunaServicos}>
+              <View style={styles.servicoItem}>
+                <Image source={require('../assets/images/nao-fume.png')} style={styles.iconeServico} />
+                <Text style={styles.textServicos}>Proibido fumar</Text>
+              </View>
+              <View style={styles.servicoItem}>
+                <Image source={require('../assets/images/ar-condicionado.png')} style={styles.iconeServico} />
+                <Text style={styles.textServicos}>Ar-condicionado</Text>
+              </View>
+              <View style={styles.servicoItem}>
+                <Image source={require('../assets/images/comida-nao.png')} style={styles.iconeServico} />
+                <Text style={styles.textServicos}>Comida não</Text>
+              </View>
             </View>
           </View>
 
@@ -114,13 +134,13 @@ export default function DetalhesViagem() {
           </View>
         </View>
 
-        <TouchableOpacity
-          style={styles.botaoReservar}
-          onPress={() => alert('Reserva confirmada!')}
-        >
-          <Text style={styles.botaoTexto}>Reservar Viagem</Text>
-        </TouchableOpacity>
       </ScrollView>
+      <TouchableOpacity
+        style={styles.botaoReservar}
+        onPress={() => alert('Reserva confirmada!')}
+      >
+        <Text style={styles.botaoTexto}>Reservar Viagem</Text>
+      </TouchableOpacity>
     </SafeAreaView>
   );
 }
@@ -131,7 +151,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
   },
   scrollContainer: {
-    padding: 16,
+    padding: 25,
     paddingBottom: 100,
   },
   header: {
@@ -152,17 +172,18 @@ const styles = StyleSheet.create({
   },
   card: {
     backgroundColor: '#f9f9f9',
-    padding: 16,
+    padding: 15,
     borderRadius: 15,
-    marginBottom: 16,
+    marginBottom: 10,
     shadowColor: '#000',
     shadowOpacity: 0.05,
     shadowOffset: { width: 0, height: 2 },
-    elevation: 5,
+    elevation: 3,
   },
   horarioContainer: {
     flexDirection: 'column',
     justifyContent: 'space-between',
+    marginVertical: 10,
     marginBottom: 10,
   },
   horaContainer: {
@@ -184,16 +205,46 @@ const styles = StyleSheet.create({
   },
   section: {
     marginBottom: 20,
+    color: '#000113',
   },
   sectionTitle: {
     fontSize: 18,
     fontWeight: 'bold',
     marginBottom: 15,
+    color: '#1E293B',
   },
   precoItem: {
     flexDirection: 'row',
     justifyContent: 'space-between',
+    alignItems: 'center',
     marginBottom: 10,
+    color: '#000113',
+  },
+  textServicos: {
+    color: '#828282',
+  },
+  precoValorContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  precoValor: {
+    marginRight: 18,
+    textAlign: 'right',
+    minWidth: 60,
+  },
+  iconePreco: {
+    width: 20,
+    height: 20,
+  },
+  linhaServicos: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginBottom: 40,
+    marginVertical: 20,
+  },
+  colunaServicos: {
+    flex: 1,
+    marginHorizontal: 5,
   },
   servicoItem: {
     flexDirection: 'row',
@@ -208,12 +259,15 @@ const styles = StyleSheet.create({
   iconeCarro: {
     width: 30,
     height: 20,
-    marginRight: 10,
+    marginRight: 8,
     resizeMode: 'contain',
   },
   infoText: {
     marginBottom: 20,
-    color: '#666',
+    marginVertical: 10,
+    color: '#1E293B',
+    fontSize: 16,
+    fontWeight: 'bold',
   },
   iconeContato: {
     width: 24,
@@ -221,11 +275,14 @@ const styles = StyleSheet.create({
     marginRight: 10,
   },
   botaoReservar: {
-    backgroundColor: '#111',
-    padding: 16,
+    position: 'absolute',
+    bottom: 20,
+    left: 20,
+    right: 20,
+    backgroundColor: '#000113',
+    padding: 14,
     borderRadius: 8,
     alignItems: 'center',
-    marginTop: 20,
   },
   botaoTexto: {
     color: '#fff',
