@@ -53,10 +53,10 @@ export default function DetalhesViagem() {
 
           <View style={{ height: 30 }} />
           <View style={styles.section}>
-            <Text style={styles.sectionTitle}>Preços</Text>
+            <Text style={styles.precoTitle}>Preços</Text>
             <View style={{ height: 5 }} />
             <View style={styles.precoItem}>
-              <Text>2 reservas</Text>
+              <Text style={styles.textPreco}>2 reservas</Text>
               <View style={styles.precoValorContainer}>
                 <Text style={styles.precoValor}>{formatarPreco(viagemData.preco)}</Text>
                 <Image source={require('../assets/images/detalhes.png')} style={styles.iconePreco} />
@@ -64,7 +64,7 @@ export default function DetalhesViagem() {
             </View>
             <View style={{ height: 10 }} />
             <View style={styles.precoItem}>
-              <Text>Valores de taxas de serviço</Text>
+              <Text style={styles.textPreco}>Valores de taxas de serviço</Text>
               <View style={styles.precoValorContainer}>
                 <Text style={styles.precoValor}>R$ 0,00</Text>
                 <Image source={require('../assets/images/detalhes.png')} style={styles.iconePreco} />
@@ -107,14 +107,14 @@ export default function DetalhesViagem() {
           <View style={styles.section}>
             <View style={styles.servicoItem}>
               <Image source={require('../assets/images/compartilhar.png')} style={styles.iconeServico} />
-              <Text>Compartilhar esta carona</Text>
+              <Text style={styles.textShare}>Compartilhar esta carona</Text>
             </View>
           </View>
 
           <View style={styles.section}>
             <View style={styles.servicoItem}>
               <Image source={viagemData.icone} style={styles.iconeCarro} />
-              <Text>{viagemData.carro}</Text>
+             <Text style={styles.textCarro}>{viagemData.carro}</Text>
             </View>
           </View>
 
@@ -123,11 +123,11 @@ export default function DetalhesViagem() {
           </Text>
 
           <View style={styles.section}>
-            <View style={styles.servicoItem}>
+            <View style={styles.servicoContato}>
               <Image source={require('../assets/images/whatsapp.png')} style={styles.iconeContato} />
               <Text>Nosso Whatsapp</Text>
             </View>
-            <View style={styles.servicoItem}>
+            <View style={styles.servicoContato}>
               <Image source={require('../assets/images/email.png')} style={styles.iconeContato} />
               <Text>Nosso E-mail</Text>
             </View>
@@ -207,8 +207,8 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     color: '#000113',
   },
-  sectionTitle: {
-    fontSize: 18,
+  precoTitle: {
+    fontSize: 25,
     fontWeight: 'bold',
     marginBottom: 15,
     color: '#1E293B',
@@ -219,6 +219,10 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginBottom: 10,
     color: '#000113',
+  },
+  textPreco: {
+    fontSize: 15,
+    fontWeight: 'bold',
   },
   textServicos: {
     color: '#828282',
@@ -231,6 +235,7 @@ const styles = StyleSheet.create({
     marginRight: 18,
     textAlign: 'right',
     minWidth: 60,
+    fontWeight: 'bold',
   },
   iconePreco: {
     width: 20,
@@ -240,11 +245,15 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     marginBottom: 40,
-    marginVertical: 20,
+    marginVertical: 30,
   },
   colunaServicos: {
     flex: 1,
     marginHorizontal: 5,
+  },
+  textShare: {
+    fontWeight: 'bold',
+    fontSize: 15,
   },
   servicoItem: {
     flexDirection: 'row',
@@ -258,16 +267,25 @@ const styles = StyleSheet.create({
   },
   iconeCarro: {
     width: 30,
-    height: 20,
+    height: 30,
     marginRight: 8,
     resizeMode: 'contain',
   },
+  textCarro: {
+    fontWeight: 'bold',
+    fontSize: 15,
+  },
   infoText: {
-    marginBottom: 20,
+    marginBottom: 35,
     marginVertical: 10,
     color: '#1E293B',
     fontSize: 16,
     fontWeight: 'bold',
+  },
+  servicoContato: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 20,
   },
   iconeContato: {
     width: 24,
