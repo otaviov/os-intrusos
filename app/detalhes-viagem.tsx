@@ -59,7 +59,9 @@ export default function DetalhesViagem() {
               <Text style={styles.textPreco}>2 reservas</Text>
               <View style={styles.precoValorContainer}>
                 <Text style={styles.precoValor}>{formatarPreco(viagemData.preco)}</Text>
-                <Image source={require('../assets/images/detalhes.png')} style={styles.iconePreco} />
+                <TouchableOpacity>
+                  <Image source={require('../assets/images/detalhes.png')} style={styles.iconePreco} />
+                </TouchableOpacity>
               </View>
             </View>
             <View style={{ height: 10 }} />
@@ -67,7 +69,9 @@ export default function DetalhesViagem() {
               <Text style={styles.textPreco}>Valores de taxas de serviço</Text>
               <View style={styles.precoValorContainer}>
                 <Text style={styles.precoValor}>R$ 0,00</Text>
-                <Image source={require('../assets/images/detalhes.png')} style={styles.iconePreco} />
+                <TouchableOpacity onPress={() => router.push('/taxa-servico')}>
+                  <Image source={require('../assets/images/detalhes.png')} style={styles.iconePreco} />
+                </TouchableOpacity>
               </View>
             </View>
           </View>
@@ -105,17 +109,21 @@ export default function DetalhesViagem() {
           </View>
 
           <View style={styles.section}>
-            <View style={styles.servicoItem}>
-              <Image source={require('../assets/images/compartilhar.png')} style={styles.iconeServico} />
-              <Text style={styles.textShare}>Compartilhar esta carona</Text>
-            </View>
+            <TouchableOpacity>
+              <View style={styles.servicoItem}>
+                <Image source={require('../assets/images/compartilhar.png')} style={styles.iconeServico} />
+                <Text style={styles.textShare}>Compartilhar esta carona</Text>
+              </View>
+            </TouchableOpacity>
           </View>
 
           <View style={styles.section}>
-            <View style={styles.servicoItem}>
-              <Image source={viagemData.icone} style={styles.iconeCarro} />
-             <Text style={styles.textCarro}>{viagemData.carro}</Text>
-            </View>
+            <TouchableOpacity>
+              <View style={styles.servicoItem}>
+                <Image source={viagemData.icone} style={styles.iconeCarro} />
+                <Text style={styles.textCarro}>{viagemData.carro}</Text>
+              </View>
+            </TouchableOpacity>
           </View>
 
           <Text style={styles.infoText}>
@@ -123,13 +131,21 @@ export default function DetalhesViagem() {
           </Text>
 
           <View style={styles.section}>
-            <View style={styles.servicoContato}>
-              <Image source={require('../assets/images/whatsapp.png')} style={styles.iconeContato} />
-              <Text>Nosso Whatsapp</Text>
-            </View>
-            <View style={styles.servicoContato}>
-              <Image source={require('../assets/images/email.png')} style={styles.iconeContato} />
-              <Text>Nosso E-mail</Text>
+            <View style={styles.servicosContatoContainer}>
+              <TouchableOpacity style={styles.botaoContato}>
+                <Image source={require('../assets/images/whatsapp.png')} style={styles.iconeContato} />
+                <Text style={styles.textoContato}>Nosso Whatsapp</Text>
+              </TouchableOpacity>
+
+              <TouchableOpacity style={styles.botaoContato}>
+                <Image source={require('../assets/images/ligar.png')} style={styles.iconeContato} />
+                <Text style={styles.textoContato}>Ligue pra gente</Text>
+              </TouchableOpacity>
+
+              <TouchableOpacity style={styles.botaoContato}>
+                <Image source={require('../assets/images/email.png')} style={styles.iconeContato} />
+                <Text style={styles.textoContato}>Nosso E-mail</Text>
+              </TouchableOpacity>
             </View>
           </View>
         </View>
@@ -155,7 +171,6 @@ const styles = StyleSheet.create({
     paddingBottom: 100,
   },
   header: {
-    //marginBottom: 20,
     padding: 16,
   },
   title: {
@@ -282,10 +297,16 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: 'bold',
   },
-  servicoContato: {
+  servicosContatoContainer: {
+    flexDirection: 'column',
+  },
+  botaoContato: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: 20,
+    paddingVertical: 8,
+  },
+  textoContato: {
+    //marginLeft: 8,
   },
   iconeContato: {
     width: 24,

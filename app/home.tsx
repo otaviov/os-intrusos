@@ -79,7 +79,7 @@ export default function HomeScreen() {
   const [mostrarSugestoesDestino, setMostrarSugestoesDestino] = useState(false);
   const [keyboardVisible, setKeyboardVisible] = useState(false);
 
-  const debounceTimeout = useRef<NodeJS.Timeout | null>(null);
+  const debounceTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
   const carregando = useRef(false);
 
   useEffect(() => {
