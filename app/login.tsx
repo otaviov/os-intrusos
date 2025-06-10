@@ -31,11 +31,19 @@ export default function Login() {
   return (
     <KeyboardAvoidingView
       style={{ flex: 1 }}
-      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      behavior={Platform.OS === 'ios' ? 'padding' : undefined} // Remove o behavior no Android
+      keyboardVerticalOffset={Platform.OS === 'ios' ? 40 : 0} // Ajuste para iOS
     >
       <ScrollView
-        contentContainerStyle={[styles.container, { minHeight: '100%' }]}
+        contentContainerStyle={[
+          styles.container,
+          {
+            flexGrow: 1, 
+            paddingBottom: keyboardVisible ? 20 : 0 // Ajusta o padding quando o teclado está visível
+          }
+        ]}
         keyboardShouldPersistTaps="handled"
+        alwaysBounceVertical={false}
       >
         {!keyboardVisible && (
           <Image
@@ -45,6 +53,7 @@ export default function Login() {
         )}
 
         <View style={styles.formContainer}>
+
           <Text style={styles.title}>Entrar</Text>
           <Text style={styles.subtitle}>Faça login para continuar</Text>
 
@@ -96,7 +105,7 @@ export default function Login() {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    flexGrow: 1,
     padding: 24,
     backgroundColor: '#fff',
     justifyContent: 'center',
@@ -107,13 +116,12 @@ const styles = StyleSheet.create({
     height: 180,
     resizeMode: 'contain',
     alignSelf: 'center',
-    //marginBottom: 40,
-    //marginTop: 40, 
+    marginVertical: 25,
   },
   formContainer: {
     flex: 1,
-    justifyContent: 'center',
-    //marginTop: 100,
+    //justifyContent: 'center',
+    marginVertical: 30,
   },
   title: {
     fontSize: 26,

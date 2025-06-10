@@ -166,11 +166,19 @@ export default function HomeScreen() {
     <TouchableWithoutFeedback onPress={fecharSugestoes}>
       <KeyboardAvoidingView
         style={{ flex: 1 }}
-        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+        behavior={Platform.OS === 'ios' ? 'padding' : undefined} // Remove o behavior no Android
+        keyboardVerticalOffset={Platform.OS === 'ios' ? 40 : 0} // Ajuste para iOS
       >
         <ScrollView
-          contentContainerStyle={[styles.container, { minHeight: '100%' }]}
+          contentContainerStyle={[
+            styles.container,
+            {
+              flexGrow: 1,
+              paddingBottom: keyboardVisible ? 20 : 0 // Ajusta o padding quando o teclado está visível
+            }
+          ]}
           keyboardShouldPersistTaps="handled"
+          alwaysBounceVertical={false}
         >
           {!keyboardVisible && (
             <Image
@@ -351,10 +359,12 @@ const styles = StyleSheet.create({
     resizeMode: 'contain',
     alignSelf: 'center',
     overflow: 'hidden',
+    marginVertical: 25,
   },
   formContainer: {
     flex: 1,
-    justifyContent: 'center',
+    //justifyContent: 'center',
+    marginVertical: 30,
   },
   title: {
     fontSize: 26,

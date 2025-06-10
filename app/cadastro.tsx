@@ -57,12 +57,20 @@ export default function Cadastro() {
   return (
     <KeyboardAvoidingView
       style={{ flex: 1 }}
-      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      behavior={Platform.OS === 'ios' ? 'padding' : undefined} // Remove o behavior no Android
+      keyboardVerticalOffset={Platform.OS === 'ios' ? 40 : 0} // Ajuste para iOS
     >
 
       <ScrollView
-        contentContainerStyle={[styles.container, { minHeight: '100%' }]}
+        contentContainerStyle={[
+          styles.container,
+          {
+            flexGrow: 1, // Adiciona isso
+            paddingBottom: keyboardVisible ? 20 : 0 // Ajusta o padding quando o teclado está visível
+          }
+        ]}
         keyboardShouldPersistTaps="handled"
+        alwaysBounceVertical={false} // Adiciona isso
       >
         {!keyboardVisible && (
           <Image
@@ -118,12 +126,14 @@ const styles = StyleSheet.create({
     width: 180,
     height: 180,
     resizeMode: 'contain',
-    alignSelf: 'center', 
+    alignSelf: 'center',
+    overflow: 'hidden',
+    marginVertical: 25,
   },
   formContainer: {
     flex: 1,
-    justifyContent: 'center',
-    //alignItems: 'center',
+    //justifyContent: 'center',
+    marginVertical: 30,
   },
   title: {
     fontSize: 26,
