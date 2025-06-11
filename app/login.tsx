@@ -53,7 +53,6 @@ export default function Login() {
         )}
 
         <View style={styles.formContainer}>
-
           <Text style={styles.title}>Entrar</Text>
           <Text style={styles.subtitle}>Faça login para continuar</Text>
 
@@ -128,10 +127,11 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     textAlign: 'center',
     marginBottom: 8,
+    color: '#1E293B',
   },
   subtitle: {
     fontSize: 16,
-    color: '#777',
+    color: '#828282',
     textAlign: 'center',
     marginBottom: 60,
   },
@@ -146,7 +146,7 @@ const styles = StyleSheet.create({
   senha: {
     height: 50,
     borderBottomWidth: 1,
-    borderColor: '#ccc',
+    borderColor: '#CBD5E1',
     paddingHorizontal: 12,
     fontSize: 16,
     marginBottom: 16,
@@ -157,7 +157,7 @@ const styles = StyleSheet.create({
     marginBottom: 24,
   },
   button: {
-    backgroundColor: '#111',
+    backgroundColor: '#000113',
     paddingVertical: 14,
     borderRadius: 8,
     alignItems: 'center',
@@ -171,7 +171,7 @@ const styles = StyleSheet.create({
   or: {
     textAlign: 'center',
     marginBottom: 12,
-    color: '#555',
+    color: '#828282',
   },
   socialContainer: {
     flexDirection: 'row',
@@ -191,7 +191,7 @@ const styles = StyleSheet.create({
   },
   footerText: {
     textAlign: 'center',
-    color: '#666',
+    color: '#828282',
   },
   link: {
     color: '#007bff',

@@ -53,8 +53,8 @@ export default function EsqueceuSenha() {
 
           <TextInput
             placeholder="E-mail cadastrado"
-            placeholderTextColor="#aaa"
-            style={styles.input}
+            placeholderTextColor="#828282"
+            style={styles.email}
             keyboardType="email-address"
             autoCapitalize="none"
             value={email}
@@ -67,13 +67,7 @@ export default function EsqueceuSenha() {
           >
             <Text style={styles.buttonText}>Enviar Link</Text>
           </TouchableOpacity>
-
-          <TouchableOpacity
-            style={styles.backButton}
-            onPress={() => router.back()}
-          >
-            <Text style={styles.backButtonText}>Voltar para o login</Text>
-          </TouchableOpacity>
+         
         </View>
       </ScrollView>
     </KeyboardAvoidingView>
@@ -86,26 +80,21 @@ const styles = StyleSheet.create({
     padding: 24,
     backgroundColor: '#fff',
     justifyContent: 'center',
-  },
-  card: {
-    backgroundColor: '#f9f9f9',
-    padding: 20,
-    borderRadius: 15,
-    marginTop: 20,
-    shadowColor: '#000',
-    shadowOpacity: 0.05,
-    shadowOffset: { width: 0, height: 2 },
-    elevation: 3,
+    position: 'relative',
   },
   logo: {
-    width: 150,
-    height: 150,
+    width: 180,
+    height: 180,
     resizeMode: 'contain',
     alignSelf: 'center',
-    marginBottom: 10,
+    marginVertical: 25,
+  },
+  formContainer: {
+    flex: 1,
+    marginVertical: 30,
   },
   title: {
-    fontSize: 24,
+    fontSize: 26,
     fontWeight: 'bold',
     textAlign: 'center',
     marginBottom: 8,
@@ -113,20 +102,22 @@ const styles = StyleSheet.create({
   },
   subtitle: {
     fontSize: 16,
-    color: '#777',
+    color: '#828282',
     textAlign: 'center',
-    marginBottom: 30,
+    marginBottom: 50,
+    padding: 4,
+    
   },
-  input: {
+  email: {
     height: 50,
     borderBottomWidth: 1,
-    borderColor: '#000113',
+    borderColor: '#CBD5E1',
     paddingHorizontal: 12,
     fontSize: 16,
     marginBottom: 30,
   },
   button: {
-    backgroundColor: '#111',
+    backgroundColor: '#000113',
     paddingVertical: 14,
     borderRadius: 8,
     alignItems: 'center',
@@ -136,13 +127,5 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontWeight: 'bold',
     fontSize: 16,
-  },
-  backButton: {
-    padding: 10,
-    alignItems: 'center',
-  },
-  backButtonText: {
-    color: '#007bff',
-    fontWeight: 'bold',
   },
 });
