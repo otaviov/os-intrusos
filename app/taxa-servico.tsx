@@ -84,7 +84,6 @@ export default function TaxaServico() {
                     viável, leve e escalável para todos.
                 </Text>
 
-
                 {/* Link para Política */}
                 <View style={styles.poliCancelamento}>
                     <Text style={styles.noLink}>Saiba mais sobre nossa</Text>

@@ -140,10 +140,11 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     textAlign: 'center',
     marginBottom: 8,
+    color: '#1E293B',
   },
   subtitle: {
     fontSize: 16,
-    color: '#777',
+    color: '#828282',
     textAlign: 'center',
     marginBottom: 60,
   },
@@ -172,7 +173,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   botao: {
-    backgroundColor: '#111',
+    backgroundColor: '#000113',
     padding: 14,
     borderRadius: 8,
     alignItems: 'center',
