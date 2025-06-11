@@ -178,6 +178,7 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     marginVertical: 30,
     textAlign: 'center',
+    color: '#1E293B',
   },
   card: {
     backgroundColor: '#f9f9f9',
@@ -193,6 +194,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     marginBottom: 8,
+    
   },
   horarioInfo: {
     flexDirection: 'column',
@@ -202,10 +204,11 @@ const styles = StyleSheet.create({
   hora: {
     fontSize: 16,
     fontWeight: 'bold',
+    color: '#000113',
   },
   tempo: {
     fontSize: 12,
-    color: '#888',
+    color: '#828282',
     marginVertical: 4,
   },
   infoRowComIcones: {
@@ -231,7 +234,7 @@ const styles = StyleSheet.create({
   preco: {
     fontSize: 16,
     fontWeight: 'bold',
-    color: '#111',
+    color: '#000113',
   },
   iconesExtras: {
     flexDirection: 'row',
@@ -247,7 +250,7 @@ const styles = StyleSheet.create({
     bottom: 20,
     left: 20,
     right: 20,
-    backgroundColor: '#111',
+    backgroundColor: '#000113',
     padding: 14,
     borderRadius: 8,
     alignItems: 'center',
