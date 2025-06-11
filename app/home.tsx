@@ -371,10 +371,11 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     textAlign: 'center',
     marginBottom: 8,
+    color: '#000113',
   },
   subtitle: {
     fontSize: 16,
-    color: '#777',
+    color: '#828282',
     textAlign: 'center',
     marginBottom: 60,
   },
@@ -432,10 +433,11 @@ const styles = StyleSheet.create({
   vagasBotao: {
     paddingHorizontal: 15,
     paddingVertical: 5,
+    
   },
   vagasLabel: {
     fontSize: 20,
-    color: '#111',
+    color: '#000113',
   },
   vagasDisplay: {
     minWidth: 50,
@@ -443,12 +445,13 @@ const styles = StyleSheet.create({
   },
   vagasNumero: {
     fontSize: 16,
+    color: '#000113',
   },
   disabled: {
-    color: '#ccc',
+    color: '#aaa',
   } as TextStyle,
   botao: {
-    backgroundColor: '#111',
+    backgroundColor: '#000113',
     padding: 14,
     borderRadius: 8,
     alignItems: 'center',
