@@ -4,7 +4,20 @@ import { Image, SafeAreaView, ScrollView, StyleSheet, Text, TouchableOpacity, Vi
 
 export default function DetalhesViagem() {
   const router = useRouter();
-  const { viagem } = useLocalSearchParams() as { viagem?: string };
+  const {
+    viagem,
+    origem = '',
+    destino = '',
+    data = '',
+    vagas = '1',
+
+  } = useLocalSearchParams() as {
+    viagem?: string;
+    origem?: string;
+    destino?: string;
+    data?: string;
+    vagas?: string;
+  };
 
   const viagemData = viagem ? JSON.parse(viagem) : null;
 
@@ -16,20 +29,53 @@ export default function DetalhesViagem() {
     );
   }
 
+  const formatarData = (dataString: string) => {
+    if (!dataString) return 'Data não especificada';
+
+    try {
+      const dataObj = new Date(dataString);
+      return dataObj.toLocaleDateString('pt-BR', {
+        weekday: 'long',
+        day: 'numeric',
+        month: 'long'
+      });
+    }
+    catch {
+      return 'Data inválida';
+    }
+  };
+
   // Função para formatar o preço
+  {/*}
   const formatarPreco = (preco: string) => {
     // Se já contém R$, retorna como está
     if (preco.includes('R$')) return preco;
     // Caso contrário, formata com R$
     return `R$ ${preco}`;
   };
+  */}
+
+  // Função para o calculo do preço 
+  const extrairValorNumerico = (preco: string): number => {
+    return parseFloat(
+      preco.replace('R$', '').replace(',', '.').trim()
+    ) || 0;
+  }
+
+  const calcularTotal = (preco: string, vagas: string): string => {
+    const total = extrairValorNumerico(preco) * parseInt(vagas, 10);
+    return `R$ ${total.toFixed(2).replace('.', ',')}`;
+  }
+
 
   return (
     <SafeAreaView style={styles.safeArea}>
       <ScrollView contentContainerStyle={styles.scrollContainer}>
         <View style={styles.header}>
           <Text style={styles.title}>Confira detalhes da sua reserva</Text>
-          <Text style={styles.subtitle}>Terça-Feira, 3 de Junho</Text>
+          <Text style={styles.subtitle}>
+            {data ? formatarData(data) : 'Data não especificada'}
+          </Text>
         </View>
 
         <View style={styles.card}>
@@ -40,6 +86,7 @@ export default function DetalhesViagem() {
                 source={require('../assets/images/ponto-partida.png')}
                 style={styles.iconePontoGrande}
               />
+              <Text style={styles.cidade}>{origem.split(',')[0]}</Text>
             </View>
             <Text style={styles.tempoGrande}>{viagemData.tempo}</Text>
             <View style={styles.horaContainer}>
@@ -48,6 +95,7 @@ export default function DetalhesViagem() {
                 source={require('../assets/images/ponto-chegada.png')}
                 style={styles.iconePontoGrande}
               />
+              <Text style={styles.cidade}>{destino.split(',')[0]}</Text>
             </View>
           </View>
 
@@ -56,9 +104,9 @@ export default function DetalhesViagem() {
             <Text style={styles.precoTitle}>Preços</Text>
             <View style={{ height: 5 }} />
             <View style={styles.precoItem}>
-              <Text style={styles.textPreco}>2 reservas</Text>
+              <Text style={styles.textPreco}>{vagas} reserva{vagas !== '1' ? 's' : ''}</Text>
               <View style={styles.precoValorContainer}>
-                <Text style={styles.precoValor}>{formatarPreco(viagemData.preco)}</Text>
+                <Text style={styles.precoValor}>{calcularTotal(viagemData.preco, vagas)}</Text>
                 <TouchableOpacity>
                   <Image source={require('../assets/images/detalhes.png')} style={styles.iconePreco} />
                 </TouchableOpacity>
@@ -204,19 +252,25 @@ const styles = StyleSheet.create({
   horaContainer: {
     flexDirection: 'row',
     alignItems: 'center',
+    gap: 10,
   },
   horaGrande: {
     fontSize: 16,
     fontWeight: 'bold',
-    marginRight: 8,
+    color: '#000113',
   },
   tempoGrande: {
     fontSize: 12,
-    color: '#888',
+    color: '#828282',
   },
   iconePontoGrande: {
     width: 16,
     height: 16,
+    marginVertical: 10,
+  },
+  cidade: {
+    fontSize: 16,
+    fontWeight: '600',
   },
   section: {
     marginBottom: 20,

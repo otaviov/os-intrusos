@@ -105,7 +105,7 @@ export default function Viagens() {
 
         <View style={styles.diasEVagas}>
           <Text style={styles.textDiasEVagas}>
-            {data ? formatarData(data) : 'Data não especificada'} • {vagas} vaga
+            {data ? formatarData(data) : 'Data não especificada'} • {vagas} reserva
             {vagas !== '1' ? 's' : ''}
           </Text>
         </View>
@@ -138,7 +138,12 @@ export default function Viagens() {
               key={v.id}
               onPress={() => router.push({
                 pathname: "/detalhes-viagem",
-                params: { viagem: JSON.stringify(v) }
+                params: { viagem: JSON.stringify(v),
+                  origem: origem,
+                  destino: destino,
+                  data: data,
+                  vagas: String(vagas) // Passa o número de vagas
+                 }
               })}
             >
               <View style={styles.card}>
@@ -286,7 +291,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: 10,
-    
   },
   carroImg: {
     width: 50,
