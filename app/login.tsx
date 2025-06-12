@@ -1,9 +1,11 @@
 // login.tsx
+import * as Facebook from 'expo-auth-session/providers/facebook';
 import { useRouter } from 'expo-router';
-import React, { useEffect, useState } from 'react';
+import * as WebBrowser from 'expo-web-browser';
+import React, { useState } from 'react';
 import {
+  Alert,
   Image,
-  Keyboard,
   KeyboardAvoidingView,
   Platform,
   ScrollView,
@@ -14,43 +16,71 @@ import {
   View,
 } from 'react-native';
 
+// Configuração necessária para o Facebook Login
+WebBrowser.maybeCompleteAuthSession();
+
 export default function Login() {
   const router = useRouter();
-  const [keyboardVisible, setKeyboardVisible] = useState(false);
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [loading, setLoading] = useState(false);
 
-  useEffect(() => {
-    const showSub = Keyboard.addListener('keyboardDidShow', () => setKeyboardVisible(true));
-    const hideSub = Keyboard.addListener('keyboardDidHide', () => setKeyboardVisible(false));
+  // Configuração do Facebook Login
+  const [request, response, promptAsync] = Facebook.useAuthRequest({
+    clientId: 'SEU_CLIENT_ID_FACEBOOK', // Substitua pelo seu App ID do Facebook
+  });
 
-    return () => {
-      showSub.remove();
-      hideSub.remove();
-    };
-  }, []);
+  // Efeito para lidar com a resposta do Facebook
+  React.useEffect(() => {
+    if (response?.type === 'success') {
+      const { token } = response.params;
+      // Aqui você enviaria o token para seu backend para autenticação
+      handleSocialLogin(token, 'facebook');
+    }
+  }, [response]);
+
+  const handleLogin = () => {
+    setLoading(true);
+    // Validação básica
+    if (!email || !password) {
+      Alert.alert('Erro', 'Por favor, preencha todos os campos');
+      setLoading(false);
+      return;
+    }
+
+    // Aqui você faria a chamada para sua API de autenticação
+    console.log('Login com:', { email, password });
+    // Simulando uma requisição assíncrona
+    setTimeout(() => {
+      setLoading(false);
+      router.push('/home');
+    }, 1500);
+  };
+
+  const handleSocialLogin = async (token: string, provider: string) => {
+    setLoading(true);
+    console.log(`Login com ${provider}`, token);
+    // Aqui você enviaria o token para seu backend
+    // Simulando uma requisição
+    setTimeout(() => {
+      setLoading(false);
+      router.push('/home');
+    }, 1500);
+  };
 
   return (
     <KeyboardAvoidingView
       style={{ flex: 1 }}
-      behavior={Platform.OS === 'ios' ? 'padding' : undefined} // Remove o behavior no Android
-      keyboardVerticalOffset={Platform.OS === 'ios' ? 40 : 0} // Ajuste para iOS
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
     >
       <ScrollView
-        contentContainerStyle={[
-          styles.container,
-          {
-            flexGrow: 1, 
-            paddingBottom: keyboardVisible ? 20 : 0 // Ajusta o padding quando o teclado está visível
-          }
-        ]}
+        contentContainerStyle={[styles.container, { minHeight: '100%' }]}
         keyboardShouldPersistTaps="handled"
-        alwaysBounceVertical={false}
       >
-        {!keyboardVisible && (
-          <Image
-            source={require('../assets/images/in.png')}
-            style={styles.logo}
-          />
-        )}
+        <Image
+          source={require('../assets/images/in.png')}
+          style={styles.logo}
+        />
 
         <View style={styles.formContainer}>
           <Text style={styles.title}>Entrar</Text>
@@ -60,32 +90,58 @@ export default function Login() {
             placeholder="Email ou CPF"
             placeholderTextColor="#aaa"
             style={styles.email}
+            value={email}
+            onChangeText={setEmail}
+            keyboardType="email-address"
+            autoCapitalize="none"
           />
           <TextInput
             placeholder="Senha"
             placeholderTextColor="#aaa"
             secureTextEntry
             style={styles.senha}
+            value={password}
+            onChangeText={setPassword}
           />
 
           <TouchableOpacity onPress={() => router.push('/esqueceu-senha')}>
             <Text style={styles.forgot}>Esqueceu sua senha?</Text>
           </TouchableOpacity>
 
-          <TouchableOpacity style={styles.button} onPress={() => router.push('/home')}>
-            <Text style={styles.buttonText}>Entrar</Text>
+          <TouchableOpacity
+            style={[styles.button, loading && styles.buttonDisabled]}
+            onPress={handleLogin}
+            disabled={loading}
+          >
+            <Text style={styles.buttonText}>
+              {loading ? 'Carregando...' : 'Entrar'}
+            </Text>
           </TouchableOpacity>
 
           <Text style={styles.or}>Ou entre pelas suas redes sociais</Text>
 
           <View style={styles.socialContainer}>
-            <TouchableOpacity style={styles.socialButton}>
-              <Image source={require('../assets/images/google-icon.png')} style={styles.socialIcon} />
+            <TouchableOpacity
+              style={styles.socialButton}
+              onPress={() => handleSocialLogin('google_token', 'google')}
+              disabled={loading}
+            >
+              <Image
+                source={require('../assets/images/google-icon.png')}
+                style={styles.socialIcon}
+              />
               <Text>Google</Text>
             </TouchableOpacity>
 
-            <TouchableOpacity style={styles.socialButton}>
-              <Image source={require('../assets/images/facebook-icon.png')} style={styles.socialIcon} />
+            <TouchableOpacity
+              style={styles.socialButton}
+              onPress={() => promptAsync()}
+              disabled={loading || !request}
+            >
+              <Image
+                source={require('../assets/images/facebook-icon.png')}
+                style={styles.socialIcon}
+              />
               <Text>Facebook</Text>
             </TouchableOpacity>
           </View>
@@ -162,6 +218,9 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     alignItems: 'center',
     marginBottom: 20,
+  },
+  buttonDisabled: {
+    opacity: 0.7,
   },
   buttonText: {
     color: '#fff',
