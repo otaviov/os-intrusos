@@ -63,7 +63,7 @@ export default function DetalhesViagem() {
   }
 
   const calcularTotal = (preco: string, vagas: string): string => {
-    const total = extrairValorNumerico(preco) * parseInt(vagas, 10);
+    const total = extrairValorNumerico(preco) * parseInt(vagas, 10) || 1;
     return `R$ ${total.toFixed(2).replace('.', ',')}`;
   }
 
