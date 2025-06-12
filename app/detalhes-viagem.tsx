@@ -107,7 +107,7 @@ export default function DetalhesViagem() {
               <Text style={styles.textPreco}>{vagas} reserva{vagas !== '1' ? 's' : ''}</Text>
               <View style={styles.precoValorContainer}>
                 <Text style={styles.precoValor}>{calcularTotal(viagemData.preco, vagas)}</Text>
-                <TouchableOpacity>
+                <TouchableOpacity onPress={() => router.push('/taxa-reserva')}>
                   <Image source={require('../assets/images/detalhes.png')} style={styles.iconePreco} />
                 </TouchableOpacity>
               </View>
