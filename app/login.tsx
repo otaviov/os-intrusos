@@ -24,17 +24,17 @@ export default function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
+  const [keyboardVisible, setKeyboardVisible] = useState(false);
 
   // Configuração do Facebook Login
   const [request, response, promptAsync] = Facebook.useAuthRequest({
-    clientId: 'SEU_CLIENT_ID_FACEBOOK', // Substitua pelo seu App ID do Facebook
+    clientId: 'SEU_CLIENT_ID_FACEBOOK', 
   });
 
   // Efeito para lidar com a resposta do Facebook
   React.useEffect(() => {
     if (response?.type === 'success') {
       const { token } = response.params;
-      // Aqui você enviaria o token para seu backend para autenticação
       handleSocialLogin(token, 'facebook');
     }
   }, [response]);
@@ -48,7 +48,6 @@ export default function Login() {
       return;
     }
 
-    // Aqui você faria a chamada para sua API de autenticação
     console.log('Login com:', { email, password });
     // Simulando uma requisição assíncrona
     setTimeout(() => {
@@ -60,7 +59,6 @@ export default function Login() {
   const handleSocialLogin = async (token: string, provider: string) => {
     setLoading(true);
     console.log(`Login com ${provider}`, token);
-    // Aqui você enviaria o token para seu backend
     // Simulando uma requisição
     setTimeout(() => {
       setLoading(false);
@@ -71,16 +69,26 @@ export default function Login() {
   return (
     <KeyboardAvoidingView
       style={{ flex: 1 }}
-      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      behavior={Platform.OS === 'ios' ? 'padding' : undefined} // Remove o behavior no Android
+      keyboardVerticalOffset={Platform.OS === 'ios' ? 40 : 0} // Ajuste para iOS
     >
       <ScrollView
-        contentContainerStyle={[styles.container, { minHeight: '100%' }]}
+        contentContainerStyle={[
+          styles.container,
+          {
+            flexGrow: 1, 
+            paddingBottom: keyboardVisible ? 20 : 0 // Ajusta o padding quando o teclado está visível
+          }
+        ]}
         keyboardShouldPersistTaps="handled"
+        alwaysBounceVertical={false}
       >
-        <Image
-          source={require('../assets/images/in.png')}
-          style={styles.logo}
-        />
+        {!keyboardVisible && (
+          <Image
+            source={require('../assets/images/in.png')}
+            style={styles.logo}
+          />
+        )}
 
         <View style={styles.formContainer}>
           <Text style={styles.title}>Entrar</Text>

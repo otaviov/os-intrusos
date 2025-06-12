@@ -81,72 +81,78 @@ export default function Viagens() {
         <Text style={styles.title}>Viagens Disponíveis</Text>
 
         {origem && destino && (
-          <View style={styles.rotaContainer}>
-            <View style={styles.rotaItem}>
-              <Image
-                source={require('../assets/images/seta-baixo.png')}
-                style={styles.iconeRota}
-              />
-              <Text style={styles.cidade}>{origem.split(',')[0]}</Text>
+
+          <View style={styles.rotaContainerCompleto}>
+            <View style={styles.rotaContainer}>
+              <View style={styles.rotaItem}>
+                <Image
+                  source={require('../assets/images/seta-baixo.png')}
+                  style={styles.iconeRota}
+                />
+                <Text style={styles.cidade}>{origem.split(',')[0]}</Text>
+              </View>
+              <View style={styles.rotaItem}>
+                <Image
+                  source={require('../assets/images/seta-cima.png')}
+                  style={styles.iconeRota}
+                />
+                <Text style={styles.cidade}>{destino.split(',')[0]}</Text>
+              </View>
             </View>
-            <View style={styles.rotaItem}>
-              <Image
-                source={require('../assets/images/seta-cima.png')}
-                style={styles.iconeRota}
-              />
-              <Text style={styles.cidade}>{destino.split(',')[0]}</Text>
+            <View style={styles.diasEVagas}>
+              <Text style={styles.textDiasEVagas}>oi</Text>
             </View>
           </View>
         )}
 
         <ScrollView contentContainerStyle={styles.scrollContainer}>
           {viagens.map((v) => (
-            <TouchableOpacity 
-            key={v.id} 
-      onPress={() => router.push({ 
-        pathname: "/detalhes-viagem", 
-        params: { viagem: JSON.stringify(v)} 
-      })}
-    >
-      <View style={styles.card}>
-              <View style={styles.horarioContainer}>
-                <View style={styles.horarioInfo}>
-                  <View style={styles.horaContainer}>
-                    <Text style={styles.hora}>{v.horaSaida}</Text>
-                    {/* Adicione o ícone de partida */}
-                    <Image
-                      source={require('../assets/images/ponto-partida.png')}
-                      style={styles.iconePonto}
-                    />
+            <TouchableOpacity
+              key={v.id}
+              onPress={() => router.push({
+                pathname: "/detalhes-viagem",
+                params: { viagem: JSON.stringify(v) }
+              })}
+            >
+              <View style={styles.card}>
+                <View style={styles.horarioContainer}>
+                  <View style={styles.horarioInfo}>
+                    <View style={styles.horaContainer}>
+                      <Text style={styles.hora}>{v.horaSaida}</Text>
+                      {/* Adicione o ícone de partida */}
+                      <Image
+                        source={require('../assets/images/ponto-partida.png')}
+                        style={styles.iconePonto}
+                      />
+                    </View>
+                    <Text style={styles.tempo}>{v.tempo}</Text>
+                    <View style={styles.horaContainer}>
+                      <Text style={styles.hora}>{v.horaChegada}</Text>
+                      {/* Adicione o ícone de chegada */}
+                      <Image
+                        source={require('../assets/images/ponto-chegada.png')}
+                        style={styles.iconePonto}
+                      />
+                    </View>
                   </View>
-                  <Text style={styles.tempo}>{v.tempo}</Text>
-                  <View style={styles.horaContainer}>
-                    <Text style={styles.hora}>{v.horaChegada}</Text>
-                    {/* Adicione o ícone de chegada */}
-                    <Image
-                      source={require('../assets/images/ponto-chegada.png')}
-                      style={styles.iconePonto}
-                    />
+
+                  <Text style={styles.preco}>{v.preco}</Text>
+                </View>
+
+                <View style={styles.infoRowComIcones}>
+                  <View style={styles.infoRow}>
+                    <Image source={v.icone} style={styles.carroImg} />
+                    <Text style={styles.carro}>{v.carro}</Text>
+                  </View>
+
+                  <View style={styles.iconesExtras}>
+                    <Image source={require('../assets/images/patas.png')} style={styles.iconeExtra} />
+                    <Image source={require('../assets/images/wi-fi.png')} style={styles.iconeExtra} />
+                    <Image source={require('../assets/images/tomada.png')} style={styles.iconeExtra} />
+                    {/* <Image source={require('../assets/images/cigarro.png')} style={styles.iconeExtra} /> */}
                   </View>
                 </View>
-
-                <Text style={styles.preco}>{v.preco}</Text>
               </View>
-
-              <View style={styles.infoRowComIcones}>
-                <View style={styles.infoRow}>
-                  <Image source={v.icone} style={styles.carroImg} />
-                  <Text style={styles.carro}>{v.carro}</Text>
-                </View>
-
-                <View style={styles.iconesExtras}>
-                  <Image source={require('../assets/images/patas.png')} style={styles.iconeExtra} />
-                  <Image source={require('../assets/images/wi-fi.png')} style={styles.iconeExtra} />
-                  <Image source={require('../assets/images/tomada.png')} style={styles.iconeExtra} />
-                  {/* <Image source={require('../assets/images/cigarro.png')} style={styles.iconeExtra} /> */}
-                </View>
-              </View>
-            </View>
             </TouchableOpacity>
           ))}
         </ScrollView>
@@ -183,8 +189,8 @@ const styles = StyleSheet.create({
   card: {
     backgroundColor: '#f9f9f9',
     padding: 15,
-    borderRadius: 15,
-    marginBottom: 10,
+    borderRadius: 12,
+    marginBottom: 8,
     shadowColor: '#000',
     shadowOpacity: 0.05,
     shadowOffset: { width: 0, height: 2 },
@@ -194,7 +200,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     marginBottom: 8,
-    
+
   },
   horarioInfo: {
     flexDirection: 'column',
@@ -255,13 +261,18 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     alignItems: 'center',
   },
-  rotaContainer: {
-    flexDirection: 'row',
+  rotaContainerCompleto: {
+    flexDirection: 'column',
     justifyContent: 'space-around',
     marginBottom: 20,
     padding: 15,
     backgroundColor: '#f5f5f5',
-    borderRadius: 10,
+    borderRadius: 12,
+  },
+  rotaContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    marginBottom: 15,
   },
   rotaItem: {
     alignItems: 'center',
@@ -271,6 +282,14 @@ const styles = StyleSheet.create({
   iconeRota: {
     width: 20,
     height: 20,
+  },
+  diasEVagas: {
+    alignItems: 'center',
+  },
+  textDiasEVagas: {
+    fontSize: 16,
+    //fontWeight: 'bold',
+    color: '#828282',
   },
   cidade: {
     fontSize: 16,
