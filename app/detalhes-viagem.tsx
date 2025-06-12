@@ -4,6 +4,9 @@ import { Image, SafeAreaView, ScrollView, StyleSheet, Text, TouchableOpacity, Vi
 
 export default function DetalhesViagem() {
   const router = useRouter();
+  const [modalCompartilharVisible, setModalCompartilharVisible] = React.useState(false);
+  const [confirmacaoVisible, setConfirmacaoVisible] = React.useState(false);
+  const [mensagemConfirmacao, setMensagemConfirmacao] = React.useState('');
   const {
     viagem,
     origem = '',
@@ -69,8 +72,8 @@ export default function DetalhesViagem() {
 
 
   return (
-    <SafeAreaView style={styles.safeArea}>
-      <ScrollView contentContainerStyle={styles.scrollContainer}>
+    <SafeAreaView style={styles.safeArea} >
+      <ScrollView contentContainerStyle={styles.scrollContainer} >
         <View style={styles.header}>
           <Text style={styles.title}>Confira detalhes da sua reserva</Text>
           <Text style={styles.subtitle}>
@@ -157,12 +160,13 @@ export default function DetalhesViagem() {
           </View>
 
           <View style={styles.section}>
-            <TouchableOpacity>
+            <TouchableOpacity onPress={() => setModalCompartilharVisible(true)}>
               <View style={styles.servicoItem}>
                 <Image source={require('../assets/images/compartilhar.png')} style={styles.iconeServico} />
                 <Text style={styles.textShare}>Compartilhar esta carona</Text>
               </View>
             </TouchableOpacity>
+
           </View>
 
           <View style={styles.section}>
@@ -197,7 +201,6 @@ export default function DetalhesViagem() {
             </View>
           </View>
         </View>
-
       </ScrollView>
       <TouchableOpacity
         style={styles.botaoReservar}
@@ -205,6 +208,81 @@ export default function DetalhesViagem() {
       >
         <Text style={styles.botaoTexto}>Reservar Viagem</Text>
       </TouchableOpacity>
+
+      {/*a partir de agora é todo o visual do botao compartilhar viagem */}
+      {/* Modal de Compartilhamento */}
+      {modalCompartilharVisible && (
+        <View style={styles.modalOverlay}>
+          <View style={styles.modalContainer}>
+            <Text style={styles.modalTitle}>Compartilhar viagem</Text>
+
+            <TouchableOpacity
+              style={styles.modalOption}
+              onPress={() => {
+                setMensagemConfirmacao('Viagem compartilhada no WhatsApp!');
+                setModalCompartilharVisible(false);
+                setConfirmacaoVisible(true);
+              }}
+            >
+              <Image source={require('../assets/images/whatsapp.png')} style={styles.modalIcon} />
+              <Text style={styles.modalOptionText}>WhatsApp</Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity
+              style={styles.modalOption}
+              onPress={() => {
+                setMensagemConfirmacao('Viagem compartilhada no Facebook!');
+                setModalCompartilharVisible(false);
+                setConfirmacaoVisible(true);
+              }}
+            >
+              <Image source={require('../assets/images/facebook.png')} style={styles.modalIcon} />
+              <Text style={styles.modalOptionText}>Facebook</Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity
+              style={styles.modalOption}
+              onPress={() => {
+                setMensagemConfirmacao('Link copiado para a área de transferência!');
+                setModalCompartilharVisible(false);
+                setConfirmacaoVisible(true);
+              }}
+            >
+              <Image source={require('../assets/images/link.png')} style={styles.modalIcon} />
+              <Text style={styles.modalOptionText}>Copiar link</Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity
+              style={styles.modalCancel}
+              onPress={() => setModalCompartilharVisible(false)}
+            >
+              <Text style={styles.modalCancelText}>Cancelar</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      )}
+
+      {/* Modal de Confirmação */}
+      {confirmacaoVisible && (
+        <View style={styles.modalOverlay}>
+          <View style={styles.modalConfirmacaoContainer}>
+            <Image
+              source={require('../assets/images/confirmado.png')}
+              style={styles.modalConfirmacaoIcon}
+            />
+            <Text style={styles.modalConfirmacaoText}>{mensagemConfirmacao}</Text>
+
+            <TouchableOpacity
+              style={styles.modalConfirmacaoBotao}
+              onPress={() => setConfirmacaoVisible(false)}
+            >
+              <Text style={styles.modalConfirmacaoBotaoTexto}>OK</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      )}
+      {/* FINAL DO BOTAO COMPARTILHAMENTO */}
+      
     </SafeAreaView>
   );
 }
@@ -367,6 +445,102 @@ const styles = StyleSheet.create({
     height: 24,
     marginRight: 10,
   },
+  // Estilos para ambos os modals
+  modalOverlay: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    backgroundColor: 'rgba(0,0,0,0.5)',
+    justifyContent: 'center',
+    alignItems: 'center',
+    zIndex: 1000,
+  },
+
+  // Estilos do modal de compartilhamento
+  modalContainer: {
+    backgroundColor: 'white',
+    padding: 20,
+    borderRadius: 12,
+    width: '80%',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
+  },
+  modalTitle: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    marginBottom: 20,
+    textAlign: 'center',
+    color: '#1E293B',
+  },
+  modalOption: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingVertical: 15,
+    borderBottomWidth: 0.5,
+    borderBottomColor: '#eee',
+  },
+  modalOptionText: {
+    marginLeft: 15,
+    fontSize: 16,
+    color: '#1E293B',
+  },
+  modalIcon: {
+    width: 24,
+    height: 24,
+  },
+  modalCancel: {
+    marginTop: 15,
+    padding: 10,
+    alignItems: 'center',
+  },
+  modalCancelText: {
+    color: '#000113',
+    fontWeight: 'bold',
+  },
+  // Estilos do modal de confirmação
+  modalConfirmacaoContainer: {
+    backgroundColor: 'white',
+    borderRadius: 20,
+    padding: 25,
+    width: '80%',
+    alignItems: 'center',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
+  },
+  modalConfirmacaoIcon: {
+    width: 50,
+    height: 50,
+    marginBottom: 15,
+  },
+  modalConfirmacaoText: {
+    fontSize: 16,
+    marginBottom: 20,
+    textAlign: 'center',
+    color: '#1E293B',
+    lineHeight: 24,
+  },
+  modalConfirmacaoBotao: {
+    backgroundColor: '#000113',
+    borderRadius: 8,
+    paddingVertical: 12,
+    paddingHorizontal: 30,
+    marginTop: 10,
+    width: '100%',
+    alignItems: 'center',
+  },
+  modalConfirmacaoBotaoTexto: {
+    color: 'white',
+    fontWeight: 'bold',
+    fontSize: 16,
+  },
   botaoReservar: {
     position: 'absolute',
     bottom: 20,
@@ -381,4 +555,5 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontWeight: 'bold',
   },
+
 });

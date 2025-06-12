@@ -10,7 +10,7 @@ export default function TaxaServico() {
         <SafeAreaView style={styles.safeArea}>
             <ScrollView contentContainerStyle={styles.container}>
                 {/* Titulo principal (topo) */}
-                <Text style={styles.tituloPrincipal}>Sobre ao cálculo das Reservas</Text>
+                <Text style={styles.tituloPrincipal}>Sobre o cálculo das Reservas</Text>
                 {/* Descrição sobre a taxa de serviços */}
                 <Text style={styles.paragrafo}>
                     Aqui, o preço que você vê é o preço final que paga. Simples assim! {'\n'}
