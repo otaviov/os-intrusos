@@ -323,15 +323,16 @@ export default function HomeScreen() {
               </TouchableOpacity>
             </View>
 
-            {/* Botão Buscar */}
+            {/* Botão Buscar */}      
             <TouchableOpacity
               style={styles.botao}
               onPress={() => router.push({
                 pathname: '/viagens',
-                params: {
+                params: { 
                   origem: origem,
                   destino: destino,
-                  data: data
+                  data: data || '',
+                  vagas: vagas.toString() // Converte o número de vagas para string
                 }
               })}
             >

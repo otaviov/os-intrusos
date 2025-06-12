@@ -70,9 +70,32 @@ const viagens = [
 
 export default function Viagens() {
   const router = useRouter();
-  const { origem = '', destino = '' } = useLocalSearchParams() as {
+  const { 
+    origem = '', 
+    destino = '',
+    data = '',
+    vagas = '1',
+  } = useLocalSearchParams() as {
     origem?: string;
     destino?: string;
+    data?: string;
+    vagas?: String;
+  };
+
+  const formatarData = (dataString: string) => {
+    if (!dataString) return 'Data não especificada';
+
+    try {
+      const dataObj = new Date(dataString);
+      return dataObj.toLocaleDateString('pt-BR', {
+        weekday: 'long',
+        day: 'numeric',
+        month: 'long'
+      });
+    }
+    catch {
+      return 'Data inválida';
+  }
   };
 
   return (
@@ -100,7 +123,9 @@ export default function Viagens() {
               </View>
             </View>
             <View style={styles.diasEVagas}>
-              <Text style={styles.textDiasEVagas}>oi</Text>
+              <Text style={styles.textDiasEVagas}>
+                {data ? formatarData(data) : 'Data não especificada'} • {vagas} vaga{vagas !== '1' ? 's' : ''}
+              </Text>
             </View>
           </View>
         )}
@@ -288,7 +313,6 @@ const styles = StyleSheet.create({
   },
   textDiasEVagas: {
     fontSize: 16,
-    //fontWeight: 'bold',
     color: '#828282',
   },
   cidade: {
