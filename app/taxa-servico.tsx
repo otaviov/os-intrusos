@@ -102,7 +102,7 @@ const styles = StyleSheet.create({
         backgroundColor: '#fff',
     },
     container: {
-        padding: 25,
+        padding: 24,
         paddingBottom: 100,
     },
     tituloPrincipal: {

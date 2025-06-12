@@ -70,8 +70,8 @@ const viagens = [
 
 export default function Viagens() {
   const router = useRouter();
-  const { 
-    origem = '', 
+  const {
+    origem = '',
     destino = '',
     data = '',
     vagas = '1',
@@ -95,7 +95,7 @@ export default function Viagens() {
     }
     catch {
       return 'Data inválida';
-  }
+    }
   };
 
   return (
@@ -103,9 +103,16 @@ export default function Viagens() {
       <View style={styles.contentWrapper}>
         <Text style={styles.title}>Viagens Disponíveis</Text>
 
-        {origem && destino && (
+        <View style={styles.diasEVagas}>
+          <Text style={styles.textDiasEVagas}>
+            {data ? formatarData(data) : 'Data não especificada'} • {vagas} vaga
+            {vagas !== '1' ? 's' : ''}
+          </Text>
+        </View>
 
-          <View style={styles.rotaContainerCompleto}>
+        {/* {origem && destino && (
+
+           <View style={styles.rotaContainerCompleto}>
             <View style={styles.rotaContainer}>
               <View style={styles.rotaItem}>
                 <Image
@@ -121,14 +128,9 @@ export default function Viagens() {
                 />
                 <Text style={styles.cidade}>{destino.split(',')[0]}</Text>
               </View>
-            </View>
-            <View style={styles.diasEVagas}>
-              <Text style={styles.textDiasEVagas}>
-                {data ? formatarData(data) : 'Data não especificada'} • {vagas} vaga{vagas !== '1' ? 's' : ''}
-              </Text>
-            </View>
-          </View>
-        )}
+              </View>
+              </View> 
+              )}  */}
 
         <ScrollView contentContainerStyle={styles.scrollContainer}>
           {viagens.map((v) => (
@@ -149,6 +151,7 @@ export default function Viagens() {
                         source={require('../assets/images/ponto-partida.png')}
                         style={styles.iconePonto}
                       />
+                      <Text style={styles.cidade}>{origem.split(',')[0]}</Text>
                     </View>
                     <Text style={styles.tempo}>{v.tempo}</Text>
                     <View style={styles.horaContainer}>
@@ -158,6 +161,7 @@ export default function Viagens() {
                         source={require('../assets/images/ponto-chegada.png')}
                         style={styles.iconePonto}
                       />
+                      <Text style={styles.cidade}>{destino.split(',')[0]}</Text>
                     </View>
                   </View>
 
@@ -198,7 +202,7 @@ const styles = StyleSheet.create({
   },
   contentWrapper: {
     flex: 1,
-    padding: 20,
+    padding: 24,
   },
   scrollContainer: {
     paddingBottom: 100,
@@ -206,10 +210,41 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 24,
     fontWeight: 'bold',
-    marginBottom: 20,
+    marginBottom: 8,
     marginVertical: 30,
     textAlign: 'center',
     color: '#1E293B',
+  },
+  //  rotaContainerCompleto: {
+  //   flexDirection: 'column',
+  //   justifyContent: 'space-around',
+  //   marginBottom: 10,
+  //   padding: 15,
+  //   backgroundColor: '#f5f5f5',
+  //   borderRadius: 12,
+  //   elevation: 2,
+  // },
+  // rotaContainer: {
+  //   flexDirection: 'row',
+  //   justifyContent: 'space-around',
+  //   marginBottom: 15,
+  // },
+  // rotaItem: {
+  //   alignItems: 'center',
+  //   flexDirection: 'row',
+  //   gap: 8,
+  // },
+  // iconeRota: {
+  //   width: 20,
+  //   height: 20,
+  // },
+  diasEVagas: {
+    alignItems: 'center',
+    marginBottom: 30,
+  },
+  textDiasEVagas: {
+    fontSize: 16,
+    color: '#828282',
   },
   card: {
     backgroundColor: '#f9f9f9',
@@ -219,13 +254,12 @@ const styles = StyleSheet.create({
     shadowColor: '#000',
     shadowOpacity: 0.05,
     shadowOffset: { width: 0, height: 2 },
-    elevation: 3,
+    elevation: 2,
   },
   horarioContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    marginBottom: 8,
-
+    marginBottom: 20,
   },
   horarioInfo: {
     flexDirection: 'column',
@@ -246,12 +280,13 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginBottom: 6,
+    marginVertical: 10,
   },
   infoRow: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 10,
+    
   },
   carroImg: {
     width: 50,
@@ -276,6 +311,19 @@ const styles = StyleSheet.create({
     height: 20,
     resizeMode: 'contain',
   },
+  horaContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 10,
+  },
+  iconePonto: {
+    width: 16,
+    height: 16,
+  },
+  cidade: {
+    fontSize: 16,
+    fontWeight: '600',
+  },
   botaoVoltar: {
     position: 'absolute',
     bottom: 20,
@@ -285,47 +333,5 @@ const styles = StyleSheet.create({
     padding: 14,
     borderRadius: 8,
     alignItems: 'center',
-  },
-  rotaContainerCompleto: {
-    flexDirection: 'column',
-    justifyContent: 'space-around',
-    marginBottom: 20,
-    padding: 15,
-    backgroundColor: '#f5f5f5',
-    borderRadius: 12,
-  },
-  rotaContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    marginBottom: 15,
-  },
-  rotaItem: {
-    alignItems: 'center',
-    flexDirection: 'row',
-    gap: 8,
-  },
-  iconeRota: {
-    width: 20,
-    height: 20,
-  },
-  diasEVagas: {
-    alignItems: 'center',
-  },
-  textDiasEVagas: {
-    fontSize: 16,
-    color: '#828282',
-  },
-  cidade: {
-    fontSize: 16,
-    fontWeight: '600',
-  },
-  horaContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 5,
-  },
-  iconePonto: {
-    width: 16,
-    height: 16,
   },
 });
