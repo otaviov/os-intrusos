@@ -1,6 +1,6 @@
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import React from 'react';
-import { Image, SafeAreaView, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Image, Linking, SafeAreaView, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
 export default function DetalhesViagem() {
   const router = useRouter();
@@ -184,17 +184,24 @@ export default function DetalhesViagem() {
 
           <View style={styles.section}>
             <View style={styles.servicosContatoContainer}>
-              <TouchableOpacity style={styles.botaoContato}>
+              <TouchableOpacity
+                style={styles.botaoContato}
+                onPress={() => Linking.openURL('https://wa.me/+5581998502797')}
+                >
                 <Image source={require('../assets/images/whatsapp.png')} style={styles.iconeContato} />
                 <Text style={styles.textoContato}>Nosso Whatsapp</Text>
               </TouchableOpacity>
 
-              <TouchableOpacity style={styles.botaoContato}>
+              <TouchableOpacity style={styles.botaoContato}
+              onPress={() => Linking.openURL('tel:+5581998502797')}
+              >
                 <Image source={require('../assets/images/ligar.png')} style={styles.iconeContato} />
                 <Text style={styles.textoContato}>Ligue pra gente</Text>
               </TouchableOpacity>
 
-              <TouchableOpacity style={styles.botaoContato}>
+              <TouchableOpacity style={styles.botaoContato}
+              onPress={() => Linking.openURL('mailto:otavioveira32@gmail.com?subject=Duvida sobre viagem')}
+              >
                 <Image source={require('../assets/images/email.png')} style={styles.iconeContato} />
                 <Text style={styles.textoContato}>Nosso E-mail</Text>
               </TouchableOpacity>
@@ -276,13 +283,13 @@ export default function DetalhesViagem() {
               style={styles.modalConfirmacaoBotao}
               onPress={() => setConfirmacaoVisible(false)}
             >
-              <Text style={styles.modalConfirmacaoBotaoTexto}>OK</Text>
+              <Text style={styles.modalConfirmacaoBotaoTexto}>Ok</Text>
             </TouchableOpacity>
           </View>
         </View>
       )}
       {/* FINAL DO BOTAO COMPARTILHAMENTO */}
-      
+
     </SafeAreaView>
   );
 }
