@@ -323,12 +323,12 @@ export default function HomeScreen() {
               </TouchableOpacity>
             </View>
 
-            {/* Botão Buscar */}      
+            {/* Botão Buscar */}
             <TouchableOpacity
               style={styles.botao}
               onPress={() => router.push({
                 pathname: '/viagens',
-                params: { 
+                params: {
                   origem: origem,
                   destino: destino,
                   data: data || '',
@@ -338,10 +338,59 @@ export default function HomeScreen() {
             >
               <Text style={styles.textoBotao}>Buscar Viagem</Text>
             </TouchableOpacity>
-
           </View>
         </ScrollView>
+
+        {/* Adicionando um rodapé com botoes de funções principais */}
+        <View style={styles.rodapeContainer}>
+          <TouchableOpacity
+            style={styles.rodapeBotao}
+            onPress={() => router.push('/home')}
+          >
+            <Image
+              source={require('../assets/images/volte.png')}
+              style={styles.rodapeIcone}
+            />
+            <Text style={styles.rodapeTexto}>Volte</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            style={styles.rodapeBotao}
+            onPress={() => router.push('/reservas')}
+          >
+            <Image
+              source={require('../assets/images/reserva1.png')}
+              style={styles.rodapeIcone}
+            />
+            <Text style={styles.rodapeTexto}>Reservas</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            style={styles.rodapeBotao}
+            onPress={() => router.push('/mensagens')}
+          >
+            <Image
+              source={require('../assets/images/msg.png')}
+              style={styles.rodapeIcone}
+            />
+            <Text style={styles.rodapeTexto}>Mensagens</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            style={styles.rodapeBotao}
+            onPress={() => router.push('/perfil')}
+          >
+            <Image
+              source={require('../assets/images/user.png')}
+              style={styles.rodapeIcone}
+            />
+            <Text style={styles.rodapeTexto}>Perfil</Text>
+          </TouchableOpacity>
+
+        </View>
+
       </KeyboardAvoidingView>
+
     </TouchableWithoutFeedback>
   );
 }
@@ -434,7 +483,7 @@ const styles = StyleSheet.create({
   vagasBotao: {
     paddingHorizontal: 15,
     paddingVertical: 5,
-    
+
   },
   vagasLabel: {
     fontSize: 20,
@@ -461,4 +510,32 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontWeight: 'bold',
   },
+  // Estilos do rodape
+  rodapeContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    alignItems: 'center',
+    paddingVertical: 12,
+    backgroundColor: '#fff',
+    borderTopWidth: 1,
+    borderTopColor: '#eee',
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    right: 0,
+  },
+  rodapeBotao: {
+    alignItems: 'center',
+    paddingHorizontal: 8,
+  },
+  rodapeIcone: {
+    width: 30,
+    height: 30,
+    marginBottom: 2,
+    tintColor: '#1E293B',
+  },
+  rodapeTexto: {
+    fontSize: 14,
+    color: '#1E293B',
+  }
 });
