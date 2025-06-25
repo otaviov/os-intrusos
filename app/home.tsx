@@ -388,9 +388,7 @@ export default function HomeScreen() {
           </TouchableOpacity>
 
         </View>
-
       </KeyboardAvoidingView>
-
     </TouchableWithoutFeedback>
   );
 }
