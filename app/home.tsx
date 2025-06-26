@@ -367,7 +367,7 @@ export default function HomeScreen() {
 
           <TouchableOpacity
             style={styles.rodapeBotao}
-            onPress={() => router.push('/mensagens')}
+            onPress={() => router.push('/atendimento')}
           >
             <Image
               source={require('../assets/images/msg.png')}
