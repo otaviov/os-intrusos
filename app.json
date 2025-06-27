@@ -16,7 +16,8 @@
         "foregroundImage": "./assets/images/carro-3d.png",
         "backgroundColor": "#ffffff"
       },
-      "edgeToEdgeEnabled": true
+      "edgeToEdgeEnabled": true,
+      "package": "com.anonymous.osintrusos"
     },
     "web": {
       "bundler": "metro",

@@ -307,7 +307,7 @@ const styles = StyleSheet.create({
     padding: 16,
   },
   title: {
-    fontSize: 25,
+    fontSize: 24,
     fontWeight: 'bold',
     marginVertical: 30,
     marginBottom: 8,
@@ -320,13 +320,12 @@ const styles = StyleSheet.create({
   },
   card: {
     backgroundColor: '#f9f9f9',
-    padding: 15,
-    borderRadius: 15,
-    marginBottom: 10,
-    shadowColor: '#000',
-    shadowOpacity: 0.05,
-    shadowOffset: { width: 0, height: 2 },
-    elevation: 3,
+        padding: 15,
+        borderRadius: 15,
+        marginBottom: 8,
+        borderWidth: 0.5,
+        borderColor: '#e2e8f0',
+        elevation: 1, 
   },
   horarioContainer: {
     flexDirection: 'column',

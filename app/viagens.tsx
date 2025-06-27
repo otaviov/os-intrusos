@@ -2,74 +2,77 @@ import { useLocalSearchParams, useRouter } from 'expo-router';
 import React from 'react';
 import { Image, SafeAreaView, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
-const viagens = [
-  {
-    id: 1,
-    horaSaida: '08:00',
-    horaChegada: '08:50',
-    preco: 'R$ 18,00',
-    carro: 'Hyundai Creta',
-    tempo: '0h50',
-    icone: require('../assets/images/carro-suv.png'),
-  },
-  {
-    id: 2,
-    horaSaida: '10:30',
-    horaChegada: '11:45',
-    preco: 'R$ 20,00',
-    carro: 'Renault Sandero',
-    tempo: '1h15',
-    icone: require('../assets/images/carro-4portas.png'),
-  },
-  {
-    id: 3,
-    horaSaida: '11:00',
-    horaChegada: '11:55',
-    preco: 'R$ 15,50',
-    carro: 'Fiat Doblo',
-    tempo: '0h55',
-    icone: require('../assets/images/minivan.png'),
-  },
-  {
-    id: 4,
-    horaSaida: '12:00',
-    horaChegada: '13:30',
-    preco: 'R$ 25,00',
-    carro: 'Hyundai HB20',
-    tempo: '1h30',
-    icone: require('../assets/images/carro-4portas.png'),
-  },
-  {
-    id: 5,
-    horaSaida: '13:00',
-    horaChegada: '13:30',
-    preco: 'R$ 10,00',
-    carro: 'Chevrolet Tracker',
-    tempo: '0h30',
-    icone: require('../assets/images/carro-suv.png'),
-  },
-  {
-    id: 6,
-    horaSaida: '14:30',
-    horaChegada: '15:30',
-    preco: 'R$ 30,00',
-    carro: 'Fiat Pulse',
-    tempo: '2h00',
-    icone: require('../assets/images/carro-suv.png'),
-  },
-  {
-    id: 7,
-    horaSaida: '15:00',
-    horaChegada: '18:30',
-    preco: 'R$ 55,00',
-    carro: 'Hyundai Chevrolet Spin',
-    tempo: '3h30',
-    icone: require('../assets/images/minivan.png'),
-  },
-];
+
 
 export default function Viagens() {
   const router = useRouter();
+
+  const viagens = [
+    {
+      id: 1,
+      horaSaida: '08:00',
+      horaChegada: '08:50',
+      preco: 'R$ 18,00',
+      carro: 'Hyundai Creta',
+      tempo: '0h50',
+      icone: require('../assets/images/carro-suv.png'),
+    },
+    {
+      id: 2,
+      horaSaida: '10:30',
+      horaChegada: '11:45',
+      preco: 'R$ 20,00',
+      carro: 'Renault Sandero',
+      tempo: '1h15',
+      icone: require('../assets/images/carro-4portas.png'),
+    },
+    {
+      id: 3,
+      horaSaida: '11:00',
+      horaChegada: '11:55',
+      preco: 'R$ 15,50',
+      carro: 'Fiat Doblo',
+      tempo: '0h55',
+      icone: require('../assets/images/minivan.png'),
+    },
+    {
+      id: 4,
+      horaSaida: '12:00',
+      horaChegada: '13:30',
+      preco: 'R$ 25,00',
+      carro: 'Hyundai HB20',
+      tempo: '1h30',
+      icone: require('../assets/images/carro-4portas.png'),
+    },
+    {
+      id: 5,
+      horaSaida: '13:00',
+      horaChegada: '13:30',
+      preco: 'R$ 10,00',
+      carro: 'Chevrolet Tracker',
+      tempo: '0h30',
+      icone: require('../assets/images/carro-suv.png'),
+    },
+    {
+      id: 6,
+      horaSaida: '14:30',
+      horaChegada: '15:30',
+      preco: 'R$ 30,00',
+      carro: 'Fiat Pulse',
+      tempo: '2h00',
+      icone: require('../assets/images/carro-suv.png'),
+    },
+    {
+      id: 7,
+      horaSaida: '15:00',
+      horaChegada: '18:30',
+      preco: 'R$ 55,00',
+      carro: 'Hyundai Chevrolet Spin',
+      tempo: '3h30',
+      icone: require('../assets/images/minivan.png'),
+    },
+  ];
+
   const {
     origem = '',
     destino = '',
@@ -138,12 +141,13 @@ export default function Viagens() {
               key={v.id}
               onPress={() => router.push({
                 pathname: "/detalhes-viagem",
-                params: { viagem: JSON.stringify(v),
+                params: {
+                  viagem: JSON.stringify(v),
                   origem: origem,
                   destino: destino,
                   data: data,
                   vagas: String(vagas) // Passa o número de vagas
-                 }
+                }
               })}
             >
               <View style={styles.card}>
