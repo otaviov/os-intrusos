@@ -42,15 +42,13 @@ export default function NovoTicketScreen() {
                     numberOfLines={4}
                     placeholderTextColor="#9ca3af"
                 />
-
-                <TouchableOpacity
-                    style={styles.botaoEnviar}
-                    onPress={handleEnviar}
-                >
-                    <Text style={styles.botaoTexto}>Enviar Mensagem</Text>
-                </TouchableOpacity>
-
             </ScrollView>
+            <TouchableOpacity
+                style={styles.botaoEnviar}
+                onPress={handleEnviar}
+            >
+                <Text style={styles.botaoTexto}>Enviar Mensagem</Text>
+            </TouchableOpacity>
         </SafeAreaView>
     );
 }
@@ -72,7 +70,7 @@ const styles = StyleSheet.create({
         marginTop: 30,
         marginBottom: 8,
         textAlign: 'center',
-        
+
     },
     subtitle: {
         fontSize: 16,
@@ -105,15 +103,18 @@ const styles = StyleSheet.create({
         padding: 14,
         fontSize: 15,
         color: '#1E293B',
-        minHeight: 200,
+        minHeight: 190,
         textAlignVertical: 'top',
     },
     botaoEnviar: {
+        position: 'absolute',
+        bottom: 20,
+        left: 20,
+        right: 20,
         backgroundColor: '#000113',
-        padding: 16,
+        padding: 14,
         borderRadius: 8,
         alignItems: 'center',
-        marginTop: 30,
     },
     botaoTexto: {
         color: '#fff',
